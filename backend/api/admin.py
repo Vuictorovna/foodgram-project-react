@@ -1,5 +1,5 @@
 from django.contrib import admin
-from api.models import Ingredient, Recipe, Tag
+from api.models import Ingredient, Tag, Recipe
 
 
 @admin.register(Ingredient)
@@ -19,7 +19,7 @@ class RecipeAdmin(admin.ModelAdmin):
         "name",
         "author",
     )
-    list_filter = ('name', 'author', 'tag')
+    list_filter = ('name', 'author', 'tags')
     empty_value_display = "-empty-"
 
 

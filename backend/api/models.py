@@ -19,15 +19,20 @@ class Ingredient(models.Model):
         help_text='Укажите единицы измерения'
     )
 
+    class Meta:
+        verbose_name_plural = 'Ингредиенты'
 
 class Tag(models.Model):
     name = models.CharField(
         max_length=200,
-        verbose_name="Тэги",
+        verbose_name="Тэг",
         help_text="Добавьте тэг",
     )
     slug = models.SlugField(max_length=40, unique=True)
     # colour=
+    class Meta:
+        verbose_name_plural = 'Тэги'
+
 
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True, db_index=True)
