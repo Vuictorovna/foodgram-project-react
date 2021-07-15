@@ -38,41 +38,41 @@ class Recipe(models.Model):
     id = models.AutoField(primary_key=True, db_index=True)
     author = models.ForeignKey(
         User,
-        blank=False,
+        blank=True,
         on_delete=models.CASCADE,
         related_name='author',
         verbose_name='Автор рецепта',
     )
     name = models.CharField(
         max_length=200,
-        blank=False,
+        blank=True,
         verbose_name='Название',
         help_text='Укажите название рецепта'
     )
-    image = models.ImageField(
-        upload_to='image/',
-        null=False
-    )
+    # image = models.ImageField(
+    #     upload_to='image/',
+    #     null=True
+    # )
     text_description = models.TextField(
-        blank=False,
+        blank=True,
         verbose_name='Описание рецепта',
         help_text='Добавьте описание рецепта'
     )
     ingredients = models.ManyToManyField(
         Ingredient,
-        blank=False,
+        blank=True,
         through='IngredientInRecipe',
         related_name='ingredients',
         verbose_name='Ингредиенты',
     )
     tags = models.ManyToManyField(
         Tag,
-        blank=False,
+        blank=True,
         related_name='tags',
         verbose_name='Теги',
     )
     cooking_time = models.PositiveSmallIntegerField(
-        blank=False,
+        blank=True,
         verbose_name='Время приготовления в минутах',
         help_text='Укажите время приготовления в минутах',
     )
@@ -81,12 +81,12 @@ class Recipe(models.Model):
         verbose_name='Дата публикации'
     )
 
-    is_favorited = models.BooleanField(
-        blank=False,
-    )
-    is_in_shopping_cart = models.BooleanField(
-        blank=False,
-    )
+    # is_favorited = models.BooleanField(
+    #     blank=True,
+    # )
+    # is_in_shopping_cart = models.BooleanField(
+    #     blank=True,
+    # )
 
     class Meta:
         verbose_name_plural = 'Рецепты'

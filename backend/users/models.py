@@ -1,5 +1,3 @@
-from django.db import models
-
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -45,15 +43,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         (ADMIN, "admin"),
     ]
 
-    email = models.EmailField(
-        verbose_name="email address", max_length=254, unique=True
-    )
-    username = models.CharField("username", max_length=150, unique=True)
-    first_name = models.CharField("first name", max_length=150, blank=True)
+    first_name = models.CharField("first name", max_length=30, blank=True)
     last_name = models.CharField("last name", max_length=150, blank=True)
-    # password =
-
-
+    username = models.CharField("username", max_length=30, unique=True)
+    email = models.EmailField(
+        verbose_name="email address", max_length=255, unique=True
+    )
     role = models.CharField(
         max_length=20,
         choices=ROLES_CHOICES,
@@ -77,4 +72,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_user_admin(self):
         return self.role == User.ADMIN
+
 

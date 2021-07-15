@@ -10,6 +10,10 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(
+        slug_field="username",
+        read_only=True,
+    )
     class Meta:
         model = Recipe
         fields = "__all__"
