@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
             is_superuser=True,
             is_staff=True,
             role=User.ADMIN,
-            **kwargs
+            **kwargs,
         )
         return user
 
@@ -49,6 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         verbose_name="email address", max_length=255, unique=True
     )
+
     role = models.CharField(
         max_length=20,
         choices=ROLES_CHOICES,
@@ -69,8 +70,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         ordering = ["-id"]
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
     @property
     def is_user_admin(self):
         return self.role == User.ADMIN
-
-

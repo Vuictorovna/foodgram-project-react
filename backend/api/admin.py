@@ -8,18 +8,14 @@ class IngredientAdmin(admin.ModelAdmin):
         "name",
         "measurement_unit",
     )
-    list_filter = ('name',)
+    list_filter = ("name",)
     empty_value_display = "-empty-"
-
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "author",
-    )
-    list_filter = ('name', 'author', 'tags')
+    list_display = ("name", "author")
+    list_filter = ("name", "author", "tags")
     empty_value_display = "-empty-"
 
 
@@ -30,4 +26,3 @@ class TagAdmin(admin.ModelAdmin):
         "slug",
     )
     empty_value_display = "-empty-"
-

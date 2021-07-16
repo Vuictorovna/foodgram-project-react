@@ -23,6 +23,9 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name_plural = "Ингредиенты"
 
+    def __str__(self):
+        return self.name
+
 
 class Tag(models.Model):
     name = models.CharField(
@@ -42,6 +45,9 @@ class Tag(models.Model):
 
     class Meta:
         verbose_name_plural = "Тэги"
+
+    def __str__(self):
+        return self.name
 
 
 class Recipe(models.Model):
