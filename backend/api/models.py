@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from colorfield.fields import ColorField
 
 
 User = get_user_model()
@@ -9,18 +10,19 @@ class Ingredient(models.Model):
     name = models.CharField(
         max_length=200,
         blank=False,
-        verbose_name='Название ингредиента',
-        help_text='Укажите название ингредиента'
+        verbose_name="Название ингредиента",
+        help_text="Укажите название ингредиента",
     )
     measurement_unit = models.CharField(
         max_length=200,
         blank=False,
-        verbose_name='Единицы измерения',
-        help_text='Укажите единицы измерения'
+        verbose_name="Единицы измерения",
+        help_text="Укажите единицы измерения",
     )
 
     class Meta:
-        verbose_name_plural = 'Ингредиенты'
+        verbose_name_plural = "Ингредиенты"
+
 
 class Tag(models.Model):
     name = models.CharField(
@@ -29,9 +31,17 @@ class Tag(models.Model):
         help_text="Добавьте тэг",
     )
     slug = models.SlugField(max_length=40, unique=True)
-    # colour=
+    COLOR_CHOICES = [
+        ("#FFFFFF", "white"),
+        ("#000000", "black"),
+        ("#7BFFB8", "green"),
+        ("#F399C5", "pink"),
+        ("#F3F255", "yellow"),
+    ]
+    color = ColorField(choices=COLOR_CHOICES)
+
     class Meta:
-        verbose_name_plural = 'Тэги'
+        verbose_name_plural = "Тэги"
 
 
 class Recipe(models.Model):
@@ -40,14 +50,14 @@ class Recipe(models.Model):
         User,
         blank=True,
         on_delete=models.CASCADE,
-        related_name='author',
-        verbose_name='Автор рецепта',
+        related_name="author",
+        verbose_name="Автор рецепта",
     )
     name = models.CharField(
         max_length=200,
         blank=True,
-        verbose_name='Название',
-        help_text='Укажите название рецепта'
+        verbose_name="Название",
+        help_text="Укажите название рецепта",
     )
     # image = models.ImageField(
     #     upload_to='image/',
@@ -55,30 +65,29 @@ class Recipe(models.Model):
     # )
     text_description = models.TextField(
         blank=True,
-        verbose_name='Описание рецепта',
-        help_text='Добавьте описание рецепта'
+        verbose_name="Описание рецепта",
+        help_text="Добавьте описание рецепта",
     )
     ingredients = models.ManyToManyField(
         Ingredient,
         blank=True,
-        through='IngredientInRecipe',
-        related_name='ingredients',
-        verbose_name='Ингредиенты',
+        through="IngredientInRecipe",
+        related_name="ingredients",
+        verbose_name="Ингредиенты",
     )
     tags = models.ManyToManyField(
         Tag,
         blank=True,
-        related_name='tags',
-        verbose_name='Теги',
+        related_name="tags",
+        verbose_name="Теги",
     )
     cooking_time = models.PositiveSmallIntegerField(
         blank=True,
-        verbose_name='Время приготовления в минутах',
-        help_text='Укажите время приготовления в минутах',
+        verbose_name="Время приготовления в минутах",
+        help_text="Укажите время приготовления в минутах",
     )
     pub_date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Дата публикации'
+        auto_now_add=True, verbose_name="Дата публикации"
     )
 
     # is_favorited = models.BooleanField(
@@ -89,8 +98,8 @@ class Recipe(models.Model):
     # )
 
     class Meta:
-        verbose_name_plural = 'Рецепты'
-        ordering = ['-pub_date']
+        verbose_name_plural = "Рецепты"
+        ordering = ["-pub_date"]
 
     def __str__(self):
         return self.name
@@ -98,15 +107,7 @@ class Recipe(models.Model):
 
 class IngredientInRecipe(models.Model):
     ingredient = models.ForeignKey(
-        Ingredient,
-        on_delete=models.CASCADE,
-        blank=False
+        Ingredient, on_delete=models.CASCADE, blank=False
     )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        blank=False
-    )
-    amount = models.PositiveSmallIntegerField(
-        blank=False
-    )
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, blank=False)
+    amount = models.PositiveSmallIntegerField(blank=False)
