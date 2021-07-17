@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.db import models
+from django.db.models import Q
 
 
 class UserManager(BaseUserManager):
@@ -64,14 +65,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "username"
-    # EMAIL_FIELD = "email"
-    # REQUIRED_FIELDS = ["email"]
+    EMAIL_FIELD = "email"
+    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
     class Meta:
         ordering = ["-id"]
 
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+    # def __str__(self):
+    #     return f"{self.first_name} {self.last_name}"
 
     @property
     def is_user_admin(self):
