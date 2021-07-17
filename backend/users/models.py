@@ -4,7 +4,6 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.db import models
-from django.db.models import Q
 
 
 class UserManager(BaseUserManager):
