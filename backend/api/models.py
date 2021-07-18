@@ -1,12 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from colorfield.fields import ColorField
+from django.db.models import UniqueConstraint
 
 
 User = get_user_model()
 
 
 class Ingredient(models.Model):
+    id = models.AutoField(primary_key=True, db_index=True)
     name = models.CharField(
         max_length=200,
         blank=False,
@@ -96,9 +98,7 @@ class Recipe(models.Model):
         auto_now_add=True, verbose_name="Дата публикации"
     )
 
-    # is_favorited = models.BooleanField(
-    #     blank=True,
-    # )
+    is_favorited = models.BooleanField(blank=True, default=False)
     # is_in_shopping_cart = models.BooleanField(
     #     blank=True,
     # )
@@ -117,3 +117,19 @@ class IngredientInRecipe(models.Model):
     )
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, blank=False)
     amount = models.PositiveSmallIntegerField(blank=False)
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="follower"
+    )
+    following = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="following"
+    )
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["user", "following"], name="unique_follow"
+            ),
+        ]

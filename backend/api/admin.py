@@ -1,10 +1,11 @@
 from django.contrib import admin
-from api.models import Ingredient, Tag, Recipe
+from api.models import Ingredient, Tag, Recipe, IngredientInRecipe
 
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "name",
         "measurement_unit",
     )
@@ -14,6 +15,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
+    # inlines = [IngredientInRecipe]
     list_display = ("name", "author")
     list_filter = ("name", "author", "tags")
     empty_value_display = "-empty-"
