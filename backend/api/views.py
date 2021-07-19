@@ -2,14 +2,19 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, filters
 from rest_framework.exceptions import ValidationError
-from .models import Ingredient, Recipe, Tag
+from .models import Follow, Ingredient, Recipe, Tag
 from .serializers import (
     IngredientSerializer,
     TagSerializer,
     RecipeSerializer,
-    FollowSerializer,
+    FollowCreateDeleteSerializer,
+    FollowListSerializer,
 )
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
+
 
 User = get_user_model()
 
@@ -37,14 +42,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(viewsets.ModelViewSet):
-    serializer_class = FollowSerializer
+    serializer_class = FollowListSerializer
     filter_backends = [filters.SearchFilter]
     # search_fields = ["=following__username", "=user__username"]
-    http_method_names = ["get", "post", "delete"]
+    # http_method_names = ["get", "post", "delete"]
 
     def get_queryset(self):
         user = self.request.user
-        return user.following.all()
+        return user.follower.all()
 
     def perform_create(self, serializer):
         current_user = self.request.user
@@ -53,3 +58,22 @@ class FollowViewSet(viewsets.ModelViewSet):
         if current_user != following:
             return serializer.save(user=current_user, following=following)
         raise ValidationError("Нельзя подписаться на самого себя")
+
+    @action(
+        detail=False,
+        methods=["DELETE"],
+    )
+    def delete(self, request, user_id=None):
+        if request.method == "DELETE":
+            current_user = request.user
+            following = get_object_or_404(User, id=user_id)
+            get_object_or_404(
+                Follow, user=current_user, following=following
+            ).delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_serializer_class(self):
+        if self.request.method in ["POST", "DELETE"]:
+            return FollowCreateDeleteSerializer
+        return FollowListSerializer

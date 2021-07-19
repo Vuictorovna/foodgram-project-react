@@ -26,13 +26,14 @@ router.register(
     basename="recipes",
 )
 router.register(
-    r"users/subscriptions", FollowViewSet, basename="subscriptions"
-)
-router.register(
     r"users/(?P<user_id>\d+)/subscribe",
     FollowViewSet,
-    basename="subscriptions",
+    basename="xxxxxx",
 )
+router.register(
+    r"users/subscriptions", FollowViewSet, basename="subscriptions"
+)
+
 
 urlpatterns = [
     path("", include(router.urls)),
