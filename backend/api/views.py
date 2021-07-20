@@ -1,3 +1,4 @@
+from django.db.models import query
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, filters
@@ -7,13 +8,14 @@ from .serializers import (
     IngredientSerializer,
     TagSerializer,
     RecipeSerializer,
-    FollowCreateDeleteSerializer,
+    # FollowCreateDeleteSerializer,
     FollowListSerializer,
 )
 from django.contrib.auth import get_user_model
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.paginator import Paginator
 
 
 User = get_user_model()
@@ -43,9 +45,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class FollowViewSet(viewsets.ModelViewSet):
     serializer_class = FollowListSerializer
-    filter_backends = [filters.SearchFilter]
-    # search_fields = ["=following__username", "=user__username"]
-    # http_method_names = ["get", "post", "delete"]
 
     def get_queryset(self):
         user = self.request.user
@@ -72,8 +71,3 @@ class FollowViewSet(viewsets.ModelViewSet):
             ).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def get_serializer_class(self):
-        if self.request.method in ["POST", "DELETE"]:
-            return FollowCreateDeleteSerializer
-        return FollowListSerializer

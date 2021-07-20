@@ -63,6 +63,12 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class RecipiesFromFollowing(RecipeSerializer):
+    class Meta:
+        model = Recipe
+        fields = ("id", "name", "cooking_time")
+
+
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
@@ -83,6 +89,13 @@ class FollowListSerializer(UserSerializer):
     last_name = serializers.CharField(
         source="following.last_name", read_only=True
     )
+    recipes = RecipiesFromFollowing(
+        source="following.recipes", many=True, read_only=True
+    )
+    recipes_count = serializers.IntegerField(
+        source="following.recipes.count", read_only=True
+    )
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = Follow
@@ -92,34 +105,12 @@ class FollowListSerializer(UserSerializer):
             "username",
             "first_name",
             "last_name",
+            "is_subscribed",
+            "recipes",
+            "recipes_count",
         ]
 
-
-class FollowCreateDeleteSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        slug_field="username",
-        read_only=True,
-        default=serializers.CurrentUserDefault(),
-        required=False,
-    )
-
-    following = serializers.SlugRelatedField(
-        slug_field="username",
-        read_only=True,
-        required=False,
-        # queryset=get_user_model().objects.all(),
-    )
-
-    # email = serializers.EmailField(source="following.email", read_only=True)
-    # id = serializers.PrimaryKeyRelatedField(
-    #     source="following.id", read_only=True
-    # )
-
-    class Meta:
-        fields = ("following", "user")
-        model = Follow
-        # validators = [
-        #     UniqueTogetherValidator(
-        #         queryset=Follow.objects.all(), fields=["user", "following"]
-        #     )
-        # ]
+    def get_is_subscribed(self, obj):
+        if obj.user.follower.filter(following_id=obj.id) is None:
+            return False
+        return True
