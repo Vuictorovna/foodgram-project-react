@@ -5,7 +5,13 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
-from .views import IngredientViewSet, TagViewSet, RecipeViewSet, FollowViewSet
+from .views import (
+    IngredientViewSet,
+    TagViewSet,
+    RecipeViewSet,
+    FollowViewSet,
+    FavoriteViewSet,
+)
 
 router = DefaultRouter()
 
@@ -21,9 +27,19 @@ router.register(
     TagViewSet,
     basename="tags",
 )
+router.register(
+    r"recipes/(?P<recipe_id>\d+)/favorite",
+    FavoriteViewSet,
+    basename="favorite",
+)
+router.register(
+    r"recipes/favorite",
+    FavoriteViewSet,
+    basename="favorite_list",
+)
 router.register(r"recipes", RecipeViewSet)
 router.register(
-    r"recipes/(?P<ingredient_id>\d+)/favorite",
+    r"recipes/(?P<recipe_id>\d+)/",
     RecipeViewSet,
     basename="recipes",
 )

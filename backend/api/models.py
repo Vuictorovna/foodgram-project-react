@@ -98,11 +98,6 @@ class Recipe(models.Model):
         auto_now_add=True, verbose_name="Дата публикации"
     )
 
-    is_favorited = models.BooleanField(blank=True, default=False)
-    # is_in_shopping_cart = models.BooleanField(
-    #     blank=True,
-    # )
-
     class Meta:
         verbose_name_plural = "Рецепты"
         ordering = ["-pub_date"]
@@ -131,5 +126,22 @@ class Follow(models.Model):
         constraints = [
             UniqueConstraint(
                 fields=["user", "following"], name="unique_follow"
+            ),
+        ]
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="favorite_recipes"
+    )
+    favorite_recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name="favorited_by"
+    )
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["user", "favorite_recipe"],
+                name="unique_favorite_recipe",
             ),
         ]
