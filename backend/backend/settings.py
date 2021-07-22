@@ -148,8 +148,8 @@ DJOSER = {
     "HIDE_USERS": False,
     "SERIALIZERS": {
         "user_create": "users.serializers.UserCreateSerializer",  # custom serializer
-        "user": "djoser.serializers.UserSerializer",
-        "current_user": "users.serializers.CurrentUserSerializer",
+        "user": "users.serializers.CurrentUserSerializer",  # custom serializer
+        "current_user": "users.serializers.CurrentUserSerializer",  # custom serializer
         "user_delete": "djoser.serializers.UserSerializer",
     },
     "PERMISSIONS": {

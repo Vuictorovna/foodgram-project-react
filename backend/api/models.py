@@ -80,7 +80,7 @@ class Recipe(models.Model):
         Ingredient,
         blank=True,
         through="IngredientInRecipe",
-        related_name="ingredients",
+        # related_name="ingredients",
         verbose_name="Ингредиенты",
     )
     tags = models.ManyToManyField(

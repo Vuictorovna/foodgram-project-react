@@ -28,3 +28,9 @@ class TagAdmin(admin.ModelAdmin):
         "slug",
     )
     empty_value_display = "-empty-"
+
+
+@admin.register(IngredientInRecipe)
+class IngredientInRecipeAdmin(admin.ModelAdmin):
+    list_display = ("id", "recipe", "amount")
+    empty_value_display = "-empty-"

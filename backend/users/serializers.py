@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer
 from rest_framework import serializers
 from .models import User
@@ -29,6 +28,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class CurrentUserSerializer(UserSerializer):
+    is_subscribed = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
@@ -37,4 +38,16 @@ class CurrentUserSerializer(UserSerializer):
             "username",
             "first_name",
             "last_name",
+            "is_subscribed",
         ]
+
+    def get_is_subscribed(self, obj):
+        request = self.context["request"]
+        user = request.user
+        if user.is_anonymous:
+            return False
+        subscribed = user.follower.filter(following=obj)
+
+        if len(subscribed) == 0:
+            return False
+        return True

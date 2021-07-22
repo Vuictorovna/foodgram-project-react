@@ -1,9 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.http import request
 from rest_framework import serializers
-from django.shortcuts import get_object_or_404
-from rest_framework.relations import PrimaryKeyRelatedField
-from rest_framework.validators import UniqueTogetherValidator
 
 from .models import (
     Favorite,
@@ -18,58 +14,114 @@ from users.serializers import UserSerializer
 User = get_user_model()
 
 
+class AuthorSerializer(UserSerializer):
+    is_subscribed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "email",
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "is_subscribed",
+        ]
+
+    def get_is_subscribed(self, obj):
+        request = self.context["request"]
+        user = request.user
+        if user.is_anonymous:
+            return False
+        subscribed = user.follower.filter(following=obj)
+
+        if len(subscribed) == 0:
+            return False
+        return True
+
+
+class FavoriteRecipeSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        source="favorite_recipe.id", read_only=True
+    )
+    name = serializers.CharField(source="favorite_recipe.name", read_only=True)
+    cooking_time = serializers.IntegerField(
+        source="favorite_recipe.cooking_time", read_only=True
+    )
+
+    class Meta:
+        model = Favorite
+        fields = ("id", "name", "cooking_time")
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
+
+    def to_internal_value(self, data):
+        return Tag.objects.get(id=data)
+
+
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = "__all__"
 
+    def to_internal_value(self, data):
+        return Ingredient.objects.get(id=data)
+
 
 class IngredientInRecipeSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source="ingredients.id")
-    amount = serializers.IntegerField(source="ingredients.amount")
+    id = IngredientSerializer()
+    name = serializers.CharField(required=False)
+    measurement_unit = serializers.IntegerField(required=False)
+    amount = serializers.IntegerField()
 
     class Meta:
         model = IngredientInRecipe
-        fields = ("id", "amount")
+        fields = ("id", "amount", "name", "measurement_unit")
+
+    def to_representation(self, instance):
+        data = IngredientSerializer(instance.ingredient).data
+        data["amount"] = instance.amount
+        return data
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(
-        slug_field="username",
-        read_only=True,
+    tags = TagSerializer(many=True)
+    author = AuthorSerializer(read_only=True)
+    ingredients = IngredientInRecipeSerializer(
+        source="ingredientinrecipe_set", many=True
     )
-    ingredients = IngredientInRecipeSerializer(many=True)
     is_favorited = serializers.SerializerMethodField()
 
     def create(self, validated_data):
-        print(validated_data)
-        # Уберем список достижений из словаря validated_data и сохраним его
-        ingredients = validated_data.pop("ingredients")
         tags = validated_data.pop("tags")
+        ingredients = validated_data.pop("ingredientinrecipe_set")
         user = self.context["request"].user
-
-        # Создадим нового котика пока без достижений, данных нам достаточно
         recipe = Recipe.objects.create(author=user, **validated_data)
         recipe.tags.set(tags)
-        # # Для каждого достижения из списка достижений
         for ingredient in ingredients:
-            print(ingredient)
-            # Создадим новую запись или получим существующий экземпляр из БД
-            current_ingredient = get_object_or_404(
-                Ingredient, pk=ingredient["ingredients"]["id"]
-            )
-            # Поместим ссылку на каждое достижение во вспомогательную таблицу
-            # Не забыв указать к какому котику оно относится
             IngredientInRecipe.objects.create(
-                ingredient=current_ingredient,
+                ingredient=ingredient["id"],
                 recipe=recipe,
-                amount=ingredient["ingredients"]["amount"],
+                amount=ingredient["amount"],
             )
         return recipe
 
     class Meta:
         model = Recipe
-        fields = ("author", "ingredients", "is_favorited")
+        fields = (
+            "id",
+            "tags",
+            "author",
+            "ingredients",
+            "name",
+            "text_description",
+            "cooking_time",
+            "is_favorited",
+        )
 
     def get_is_favorited(self, obj):
         request = self.context["request"]
@@ -87,12 +139,6 @@ class RecipiesFromFollowingSerializer(RecipeSerializer):
     class Meta:
         model = Recipe
         fields = ("id", "name", "cooking_time")
-
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = "__all__"
 
 
 class FollowSerializer(UserSerializer):
@@ -135,17 +181,3 @@ class FollowSerializer(UserSerializer):
         if len(subscribed) == 0:
             return False
         return True
-
-
-class FavoriteRecipeSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(
-        source="favorite_recipe.id", read_only=True
-    )
-    name = serializers.CharField(source="favorite_recipe.name", read_only=True)
-    cooking_time = serializers.IntegerField(
-        source="favorite_recipe.cooking_time", read_only=True
-    )
-
-    class Meta:
-        model = Favorite
-        fields = ("id", "name", "cooking_time")

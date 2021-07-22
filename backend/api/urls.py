@@ -1,8 +1,6 @@
 from django.conf.urls import include
-from django.urls import path, re_path
-from rest_framework import views
+from django.urls import path
 from rest_framework.routers import DefaultRouter
-from rest_framework.urlpatterns import format_suffix_patterns
 
 
 from .views import (
@@ -46,7 +44,7 @@ router.register(
 router.register(
     r"users/(?P<user_id>\d+)/subscribe",
     FollowViewSet,
-    basename="xxxxxx",
+    basename="subscribe",
 )
 router.register(
     r"users/subscriptions", FollowViewSet, basename="subscriptions"

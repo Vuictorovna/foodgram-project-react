@@ -1,4 +1,3 @@
-from django.db.models import query
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, filters
@@ -12,7 +11,7 @@ from .serializers import (
     FavoriteRecipeSerializer,
 )
 from django.contrib.auth import get_user_model
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -34,12 +33,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ["is_favorited"]
-
-    # def perform_create(self, serializer):
-    #     recipe_id = self.kwargs.get("recipe_id")
-    #     get_object_or_404(Recipe, pk=recipe_id)
-    #     serializer.save(author=self.request.user, recipe_id=recipe_id)
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -80,7 +73,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         return user.favorite_recipes.all()
 
     def perform_create(self, serializer):
-        print("!!!!!!!!")
         current_user = self.request.user
         recipe = Recipe.objects.get(id=self.kwargs["recipe_id"])
         return serializer.save(user=current_user, favorite_recipe=recipe)
@@ -90,7 +82,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         methods=["DELETE"],
     )
     def delete(self, request, recipe_id=None):
-        print("!!!!!!!!")
         if request.method == "DELETE":
             current_user = request.user
             recipe = get_object_or_404(Recipe, id=recipe_id)
