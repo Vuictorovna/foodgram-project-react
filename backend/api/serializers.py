@@ -1,9 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from drf_extra_fields.fields import Base64ImageField
 
 from .models import (
     Favorite,
     Ingredient,
+    ShoppingCart,
     Tag,
     Recipe,
     IngredientInRecipe,
@@ -45,13 +47,14 @@ class FavoriteRecipeSerializer(serializers.ModelSerializer):
         source="favorite_recipe.id", read_only=True
     )
     name = serializers.CharField(source="favorite_recipe.name", read_only=True)
+    image = Base64ImageField(source="favorite_recipe.image", read_only=True)
     cooking_time = serializers.IntegerField(
         source="favorite_recipe.cooking_time", read_only=True
     )
 
     class Meta:
         model = Favorite
-        fields = ("id", "name", "cooking_time")
+        fields = ("id", "name", "image", "cooking_time")
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -94,6 +97,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     ingredients = IngredientInRecipeSerializer(
         source="ingredientinrecipe_set", many=True
     )
+    image = Base64ImageField()
     is_favorited = serializers.SerializerMethodField()
 
     def create(self, validated_data):
@@ -118,6 +122,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             "author",
             "ingredients",
             "name",
+            "image",
             "text_description",
             "cooking_time",
             "is_favorited",
@@ -138,7 +143,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 class RecipiesFromFollowingSerializer(RecipeSerializer):
     class Meta:
         model = Recipe
-        fields = ("id", "name", "cooking_time")
+        fields = ("id", "name", "image", "cooking_time")
 
 
 class FollowSerializer(UserSerializer):
@@ -181,3 +186,33 @@ class FollowSerializer(UserSerializer):
         if len(subscribed) == 0:
             return False
         return True
+
+
+class ShoppingCartSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        source="recipe_in_cart.id", read_only=True
+    )
+    name = serializers.CharField(source="recipe_in_cart.name", read_only=True)
+    image = Base64ImageField(source="recipe_in_cart.image", read_only=True)
+    cooking_time = serializers.IntegerField(
+        source="recipe_in_cart.cooking_time", read_only=True
+    )
+
+    class Meta:
+        model = ShoppingCart
+        fields = ("id", "name", "image", "cooking_time")
+
+
+class ShoppingListSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=False)
+    measurement_unit = serializers.IntegerField(required=False)
+    amount = serializers.IntegerField()
+
+    class Meta:
+        model = IngredientInRecipe
+        fields = ("name", "measurement_unit", "amount")
+
+    def to_representation(self, instance):
+        data = IngredientSerializer(instance.ingredient).data
+        data["amount"] = instance.amount
+        return data

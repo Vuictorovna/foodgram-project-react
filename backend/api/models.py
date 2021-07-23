@@ -67,10 +67,7 @@ class Recipe(models.Model):
         verbose_name="Название",
         help_text="Укажите название рецепта",
     )
-    # image = models.ImageField(
-    #     upload_to='image/',
-    #     null=True
-    # )
+    image = models.ImageField(upload_to="image/", null=True)
     text_description = models.TextField(
         blank=True,
         verbose_name="Описание рецепта",
@@ -143,5 +140,22 @@ class Favorite(models.Model):
             UniqueConstraint(
                 fields=["user", "favorite_recipe"],
                 name="unique_favorite_recipe",
+            ),
+        ]
+
+
+class ShoppingCart(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="in_cart"
+    )
+    recipe_in_cart = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name="put_in_cart_by"
+    )
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["user", "recipe_in_cart"],
+                name="unique_recipe_in_cart",
             ),
         ]
