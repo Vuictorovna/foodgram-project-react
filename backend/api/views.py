@@ -37,6 +37,39 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     filter_backends = [DjangoFilterBackend]
+    # filterset_fields = (
+    #     "author",
+    #     "tags__slug",
+    # )
+
+    # def get_queryset(self):
+    #     queryset = Recipe.objects.all()
+    #     user = self.request.user
+    #     user_id = user.pk
+    #     is_favorited = self.request.query_params.get("is_favorited")
+    #     # if is_favorited is not None:
+    #     #     queryset = queryset.filter(favorited_by=user_id)
+    #     #     print(queryset)
+    #     favorited = queryset.favorited_by.filter()
+    #     print(is_favorited)
+    #     # return is_favorited
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     is_favorited = self.request.query_params.get("is_favorited")
+    #     print(type(is_favorited))
+    #     is_in_shopping_cart = self.request.query_params.get(
+    #         "is_in_shopping_cart"
+    #     )
+    #     if is_favorited is None and is_in_shopping_cart is None:
+    #         return Recipe.objects.all()
+    #     if is_favorited == "1":
+    #         print(user.favorite_recipes.all())
+    #         return user.favorite_recipes.all()
+    #         recipe = user.favorite_recipes.all()[0]
+    #         fav = recipe__favorite_recipe
+    #         users = favorite_recipe.favorited_by.all()
+    #     if is_in_shopping_cart == 1:
+    #         return user.in_cart.all()
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -74,6 +107,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+
         return user.favorite_recipes.all()
 
     def perform_create(self, serializer):
@@ -133,6 +167,15 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
             ).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # @action(
+    #     detail=False,
+    #     methods=["PUT"],
+    # )
+    # def update(self, instance, validated_data):
+    #     instance.title = validated_data["title"]
+    #     instance.save()
+    #     return instance
 
 
 # class ShoppingListViewSet(viewsets.ViewSet):

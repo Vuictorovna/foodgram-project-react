@@ -99,6 +99,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     )
     image = Base64ImageField()
     is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_cart = serializers.SerializerMethodField()
 
     def create(self, validated_data):
         tags = validated_data.pop("tags")
@@ -126,6 +127,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             "text_description",
             "cooking_time",
             "is_favorited",
+            "is_in_shopping_cart",
         )
 
     def get_is_favorited(self, obj):
@@ -136,6 +138,17 @@ class RecipeSerializer(serializers.ModelSerializer):
 
         favorited = user.favorite_recipes.filter(favorite_recipe=obj)
         if len(favorited) == 0:
+            return False
+        return True
+
+    def get_is_in_shopping_cart(self, obj):
+        request = self.context["request"]
+        user = request.user
+        if user.is_anonymous:
+            return False
+
+        is_in_shopping_cart = user.in_cart.filter(recipe_in_cart=obj)
+        if len(is_in_shopping_cart) == 0:
             return False
         return True
 
