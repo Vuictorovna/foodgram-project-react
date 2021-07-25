@@ -16,7 +16,7 @@ from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import FileResponse
-from api.paginator import ResultsSetPagination
+
 import io
 
 
@@ -38,7 +38,6 @@ class TagViewSet(viewsets.ModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    pagination_class = ResultsSetPagination
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
     ]
