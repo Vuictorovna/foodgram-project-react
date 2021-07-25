@@ -11,7 +11,6 @@ from .views import (
     FavoriteViewSet,
     ShoppingCartViewSet,
     get_list,
-    # ShoppingListViewSet,
 )
 
 router = DefaultRouter()
@@ -43,11 +42,6 @@ router.register(
     ShoppingCartViewSet,
     basename="shopping_cart",
 )
-# router.register(
-#     r"recipes/download_shopping_cart",
-#     ShoppingListViewSet,
-#     basename="download_shopping_cart",
-# )
 router.register(r"recipes", RecipeViewSet)
 router.register(
     r"recipes/(?P<recipe_id>\d+)/",

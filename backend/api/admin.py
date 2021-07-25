@@ -5,6 +5,8 @@ from api.models import (
     Recipe,
     IngredientInRecipe,
     ShoppingCart,
+    Follow,
+    Favorite,
 )
 
 
@@ -21,7 +23,6 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    # inlines = [IngredientInRecipe]
     list_display = ("id", "name", "author")
     list_filter = ("name", "author", "tags")
     empty_value_display = "-empty-"
@@ -45,4 +46,16 @@ class IngredientInRecipeAdmin(admin.ModelAdmin):
 @admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "recipe_in_cart")
+    empty_value_display = "-empty-"
+
+
+@admin.register(Follow)
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "following")
+    empty_value_display = "-empty-"
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "favorite_recipe")
     empty_value_display = "-empty-"

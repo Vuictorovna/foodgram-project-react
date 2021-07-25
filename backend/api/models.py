@@ -56,38 +56,37 @@ class Recipe(models.Model):
     id = models.AutoField(primary_key=True, db_index=True)
     author = models.ForeignKey(
         User,
-        blank=True,
+        blank=False,
         on_delete=models.CASCADE,
         related_name="recipes",
         verbose_name="Автор рецепта",
     )
     name = models.CharField(
         max_length=200,
-        blank=True,
+        blank=False,
         verbose_name="Название",
         help_text="Укажите название рецепта",
     )
-    image = models.ImageField(upload_to="image/", null=True)
+    image = models.ImageField(upload_to="image/", null=False)
     text_description = models.TextField(
-        blank=True,
+        blank=False,
         verbose_name="Описание рецепта",
         help_text="Добавьте описание рецепта",
     )
     ingredients = models.ManyToManyField(
         Ingredient,
-        blank=True,
+        blank=False,
         through="IngredientInRecipe",
-        # related_name="ingredients",
         verbose_name="Ингредиенты",
     )
     tags = models.ManyToManyField(
         Tag,
-        blank=True,
+        blank=False,
         related_name="tags",
         verbose_name="Теги",
     )
     cooking_time = models.PositiveSmallIntegerField(
-        blank=True,
+        blank=False,
         verbose_name="Время приготовления в минутах",
         help_text="Укажите время приготовления в минутах",
     )
@@ -110,6 +109,9 @@ class IngredientInRecipe(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, blank=False)
     amount = models.PositiveSmallIntegerField(blank=False)
 
+    class Meta:
+        verbose_name_plural = "Количество ингредиентов в рецепте"
+
 
 class Follow(models.Model):
     user = models.ForeignKey(
@@ -125,6 +127,7 @@ class Follow(models.Model):
                 fields=["user", "following"], name="unique_follow"
             ),
         ]
+        verbose_name_plural = "Подписки"
 
 
 class Favorite(models.Model):
@@ -142,6 +145,7 @@ class Favorite(models.Model):
                 name="unique_favorite_recipe",
             ),
         ]
+        verbose_name_plural = "Списки избранного"
 
 
 class ShoppingCart(models.Model):
@@ -159,3 +163,4 @@ class ShoppingCart(models.Model):
                 name="unique_recipe_in_cart",
             ),
         ]
+        verbose_name_plural = "Списки покупок"

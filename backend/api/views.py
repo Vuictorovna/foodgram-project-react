@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, permissions
 from rest_framework.exceptions import ValidationError
 from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
 from .serializers import (
@@ -10,13 +10,13 @@ from .serializers import (
     FollowSerializer,
     FavoriteRecipeSerializer,
     ShoppingCartSerializer,
-    ShoppingListSerializer,
 )
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import FileResponse
+from api.paginator import ResultsSetPagination
 import io
 
 
@@ -38,40 +38,40 @@ class TagViewSet(viewsets.ModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
+    pagination_class = ResultsSetPagination
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+    ]
     filter_backends = [DjangoFilterBackend]
-    # filterset_fields = (
-    #     "author",
-    #     "tags__slug",
-    # )
+    filterset_fields = (
+        "author",
+        "tags__slug",
+    )
 
-    # def get_queryset(self):
-    #     queryset = Recipe.objects.all()
-    #     user = self.request.user
-    #     user_id = user.pk
-    #     is_favorited = self.request.query_params.get("is_favorited")
-    #     # if is_favorited is not None:
-    #     #     queryset = queryset.filter(favorited_by=user_id)
-    #     #     print(queryset)
-    #     favorited = queryset.favorited_by.filter()
-    #     print(is_favorited)
-    #     # return is_favorited
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     is_favorited = self.request.query_params.get("is_favorited")
-    #     print(type(is_favorited))
-    #     is_in_shopping_cart = self.request.query_params.get(
-    #         "is_in_shopping_cart"
-    #     )
-    #     if is_favorited is None and is_in_shopping_cart is None:
-    #         return Recipe.objects.all()
-    #     if is_favorited == "1":
-    #         print(user.favorite_recipes.all())
-    #         return user.favorite_recipes.all()
-    #         recipe = user.favorite_recipes.all()[0]
-    #         fav = recipe__favorite_recipe
-    #         users = favorite_recipe.favorited_by.all()
-    #     if is_in_shopping_cart == 1:
-    #         return user.in_cart.all()
+    def get_queryset(self):
+        user = self.request.user
+        is_favorited = self.request.query_params.get("is_favorited")
+        is_in_shopping_cart = self.request.query_params.get(
+            "is_in_shopping_cart"
+        )
+        if is_favorited is None and is_in_shopping_cart is None:
+            return Recipe.objects.all()
+
+        if is_favorited == "1":
+            favorites = []
+            recipes = user.favorite_recipes.all()
+            for recipe in recipes:
+                fav = recipe.favorite_recipe
+                favorites.append(fav)
+            return favorites
+
+        if is_in_shopping_cart == "1":
+            cart = []
+            recipes = user.in_cart.all()
+            for recipe in recipes:
+                rec = recipe.recipe_in_cart
+                cart.append(rec)
+            return cart
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -170,26 +170,10 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # @action(
-    #     detail=False,
-    #     methods=["PUT"],
-    # )
-    # def update(self, instance, validated_data):
-    #     instance.title = validated_data["title"]
-    #     instance.save()
-    #     return instance
 
-
-# class ShoppingListViewSet(viewsets.ViewSet):
-#     # serializer_class = ShoppingListSerializer
-#     @action(
-#         detail=False,
-#         methods=["GET"],
-#     )
 @api_view(["GET"])
 def get_list(request):
-    # user = request.user
-    user = User.objects.get(id=10)
+    user = request.user
     cart = user.in_cart.all()
     result = {}
     for recipe in cart:
@@ -202,5 +186,5 @@ def get_list(request):
             else:
                 result[ingredient_in_cart_id] = amount_in_cart
     s = str(result)
-    b = io.StringIO(s)
+    b = io.BytesIO(s.encode("utf-8"))
     return FileResponse(b, as_attachment=True, filename="list.txt")

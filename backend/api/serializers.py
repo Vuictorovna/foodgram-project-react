@@ -128,6 +128,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 recipe=instance,
                 amount=ingredient["amount"],
             )
+        instance.refresh_from_db()
         return instance
 
     class Meta:
@@ -229,18 +230,3 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingCart
         fields = ("id", "name", "image", "cooking_time")
-
-
-class ShoppingListSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(required=False)
-    measurement_unit = serializers.IntegerField(required=False)
-    amount = serializers.IntegerField()
-
-    class Meta:
-        model = IngredientInRecipe
-        fields = ("name", "measurement_unit", "amount")
-
-    def to_representation(self, instance):
-        data = IngredientSerializer(instance.ingredient).data
-        data["amount"] = instance.amount
-        return data
