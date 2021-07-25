@@ -6,36 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0003_auto_20210714_1707'),
+        ("api", "0003_auto_20210714_1707"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='ingredient',
-            options={'verbose_name_plural': 'Ингредиенты'},
+            name="ingredient",
+            options={"verbose_name_plural": "Ингредиенты"},
         ),
         migrations.AlterModelOptions(
-            name='tag',
-            options={'verbose_name_plural': 'Тэги'},
+            name="tag",
+            options={"verbose_name_plural": "Тэги"},
         ),
         migrations.AlterField(
-            model_name='recipe',
-            name='image',
-            field=models.ImageField(null=True, upload_to='image/'),
+            model_name="recipe",
+            name="image",
+            field=models.ImageField(null=True, upload_to="image/"),
         ),
         migrations.AlterField(
-            model_name='recipe',
-            name='is_favorited',
+            model_name="recipe",
+            name="is_favorited",
             field=models.BooleanField(blank=True),
         ),
         migrations.AlterField(
-            model_name='recipe',
-            name='is_in_shopping_cart',
+            model_name="recipe",
+            name="is_in_shopping_cart",
             field=models.BooleanField(blank=True),
         ),
         migrations.AlterField(
-            model_name='tag',
-            name='name',
-            field=models.CharField(help_text='Добавьте тэг', max_length=200, verbose_name='Тэг'),
+            model_name="tag",
+            name="name",
+            field=models.CharField(
+                help_text="Добавьте тэг", max_length=200, verbose_name="Тэг"
+            ),
         ),
     ]

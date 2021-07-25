@@ -6,16 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0014_auto_20210720_1945'),
+        ("api", "0014_auto_20210720_1945"),
     ]
 
     operations = [
         migrations.RemoveConstraint(
-            model_name='favorite',
-            name='favorite_recipe',
+            model_name="favorite",
+            name="favorite_recipe",
         ),
         migrations.AddConstraint(
-            model_name='favorite',
-            constraint=models.UniqueConstraint(fields=('user', 'favorite_recipe'), name='unique_favorite_recipe'),
+            model_name="favorite",
+            constraint=models.UniqueConstraint(
+                fields=("user", "favorite_recipe"),
+                name="unique_favorite_recipe",
+            ),
         ),
     ]

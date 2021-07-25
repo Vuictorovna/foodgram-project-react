@@ -7,13 +7,23 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0008_tag_color'),
+        ("api", "0008_tag_color"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='tag',
-            name='color',
-            field=colorfield.fields.ColorField(choices=[('#FFFFFF', 'white'), ('#000000', 'black'), ('#7BFFB8', 'green'), ('#F399C5', 'pink'), ('#F3F255', 'yellow')], default='#FFFFFF', max_length=18),
+            model_name="tag",
+            name="color",
+            field=colorfield.fields.ColorField(
+                choices=[
+                    ("#FFFFFF", "white"),
+                    ("#000000", "black"),
+                    ("#7BFFB8", "green"),
+                    ("#F399C5", "pink"),
+                    ("#F3F255", "yellow"),
+                ],
+                default="#FFFFFF",
+                max_length=18,
+            ),
         ),
     ]

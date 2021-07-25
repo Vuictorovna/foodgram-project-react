@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0009_auto_20210716_1706'),
+        ("api", "0009_auto_20210716_1706"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ingredient',
-            name='id',
-            field=models.AutoField(db_index=True, primary_key=True, serialize=False),
+            model_name="ingredient",
+            name="id",
+            field=models.AutoField(
+                db_index=True, primary_key=True, serialize=False
+            ),
         ),
     ]

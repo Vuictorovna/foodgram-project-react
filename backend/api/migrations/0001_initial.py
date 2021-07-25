@@ -7,16 +7,37 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Ingredient',
+            name="Ingredient",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='Укажите название ингредиента', max_length=200, verbose_name='Название ингредиента')),
-                ('measurement_unit', models.CharField(help_text='Укажите единицы измерения', max_length=200, verbose_name='Единицы измерения')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="Укажите название ингредиента",
+                        max_length=200,
+                        verbose_name="Название ингредиента",
+                    ),
+                ),
+                (
+                    "measurement_unit",
+                    models.CharField(
+                        help_text="Укажите единицы измерения",
+                        max_length=200,
+                        verbose_name="Единицы измерения",
+                    ),
+                ),
             ],
         ),
     ]

@@ -6,16 +6,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0001_initial'),
+        ("api", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='Добавьте тэг', max_length=200, verbose_name='Тэги')),
-                ('slug', models.SlugField(max_length=40, unique=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="Добавьте тэг",
+                        max_length=200,
+                        verbose_name="Тэги",
+                    ),
+                ),
+                ("slug", models.SlugField(max_length=40, unique=True)),
             ],
         ),
     ]

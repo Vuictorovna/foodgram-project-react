@@ -1,24 +1,18 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, filters, permissions
-from rest_framework.exceptions import ValidationError
-from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
-from .serializers import (
-    IngredientSerializer,
-    TagSerializer,
-    RecipeSerializer,
-    FollowSerializer,
-    FavoriteRecipeSerializer,
-    ShoppingCartSerializer,
-)
-from django.contrib.auth import get_user_model
-from rest_framework.decorators import action, api_view
-from rest_framework.response import Response
-from rest_framework import status
-from django.http import FileResponse
-
 import io
 
+from django.contrib.auth import get_user_model
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, permissions, status, viewsets
+from rest_framework.decorators import action, api_view
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+
+from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
+from .serializers import (FavoriteRecipeSerializer, FollowSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          ShoppingCartSerializer, TagSerializer)
 
 User = get_user_model()
 

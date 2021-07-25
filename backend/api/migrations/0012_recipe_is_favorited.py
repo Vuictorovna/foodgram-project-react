@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0011_auto_20210718_1622'),
+        ("api", "0011_auto_20210718_1622"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='recipe',
-            name='is_favorited',
+            model_name="recipe",
+            name="is_favorited",
             field=models.BooleanField(blank=True, default=False),
         ),
     ]
