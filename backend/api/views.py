@@ -26,6 +26,8 @@ User = get_user_model()
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    search_fields = ("name",)
 
 
 class TagViewSet(viewsets.ModelViewSet):

@@ -95,9 +95,10 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     author = AuthorSerializer(read_only=True)
     ingredients = IngredientInRecipeSerializer(
-        source="ingredientinrecipe_set", many=True
+        source="ingredientinrecipe_set",
+        many=True,
     )
-    image = Base64ImageField()
+    image = Base64ImageField(required=False)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
@@ -114,6 +115,20 @@ class RecipeSerializer(serializers.ModelSerializer):
                 amount=ingredient["amount"],
             )
         return recipe
+
+    def update(self, instance, validated_data):
+        IngredientInRecipe.objects.filter(recipe=instance).delete()
+        tags = validated_data.pop("tags")
+        ingredients = validated_data.pop("ingredientinrecipe_set")
+        instance.tags.set(tags)
+        Recipe.objects.filter(pk=instance.pk).update(**validated_data)
+        for ingredient in ingredients:
+            IngredientInRecipe.objects.create(
+                ingredient=ingredient["id"],
+                recipe=instance,
+                amount=ingredient["amount"],
+            )
+        return instance
 
     class Meta:
         model = Recipe
