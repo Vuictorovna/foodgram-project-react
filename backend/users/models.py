@@ -1,5 +1,8 @@
-from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
-                                        PermissionsMixin)
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
 
 
@@ -66,9 +69,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         ordering = ["-id"]
-
-    # def __str__(self):
-    #     return f"{self.first_name} {self.last_name}"
 
     @property
     def is_user_admin(self):

@@ -10,9 +10,14 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
-from .serializers import (FavoriteRecipeSerializer, FollowSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          ShoppingCartSerializer, TagSerializer)
+from .serializers import (
+    FavoriteRecipeSerializer,
+    FollowSerializer,
+    IngredientSerializer,
+    RecipeSerializer,
+    ShoppingCartSerializer,
+    TagSerializer,
+)
 
 User = get_user_model()
 
@@ -76,7 +81,7 @@ class FollowViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         current_user = self.request.user
-        following = User.objects.get(id=self.kwargs["user_id"])
+        following = get_object_or_404(User, id=self.kwargs["user_id"])
 
         if current_user != following:
             return serializer.save(user=current_user, following=following)
@@ -87,12 +92,11 @@ class FollowViewSet(viewsets.ModelViewSet):
         methods=["DELETE"],
     )
     def delete(self, request, user_id=None):
-        if request.method == "DELETE":
-            current_user = request.user
-            following = get_object_or_404(User, id=user_id)
-            get_object_or_404(
-                Follow, user=current_user, following=following
-            ).delete()
+        current_user = request.user
+        following = get_object_or_404(User, id=user_id)
+        get_object_or_404(
+            Follow, user=current_user, following=following
+        ).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -102,12 +106,11 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-
         return user.favorite_recipes.all()
 
     def perform_create(self, serializer):
         current_user = self.request.user
-        recipe = Recipe.objects.get(id=self.kwargs["recipe_id"])
+        recipe = get_object_or_404(Recipe, id=self.kwargs["recipe_id"])
         return serializer.save(user=current_user, favorite_recipe=recipe)
 
     @action(
@@ -115,12 +118,11 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         methods=["DELETE"],
     )
     def delete(self, request, recipe_id=None):
-        if request.method == "DELETE":
-            current_user = request.user
-            recipe = get_object_or_404(Recipe, id=recipe_id)
-            get_object_or_404(
-                Favorite, user=current_user, favorite_recipe=recipe
-            ).delete()
+        current_user = request.user
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        get_object_or_404(
+            Favorite, user=current_user, favorite_recipe=recipe
+        ).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -146,7 +148,7 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         current_user = self.request.user
-        recipe = Recipe.objects.get(id=self.kwargs["recipe_id"])
+        recipe = get_object_or_404(Recipe, id=self.kwargs["recipe_id"])
         return serializer.save(user=current_user, recipe_in_cart=recipe)
 
     @action(
@@ -154,12 +156,11 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
         methods=["DELETE"],
     )
     def delete(self, request, recipe_id=None):
-        if request.method == "DELETE":
-            current_user = request.user
-            recipe = get_object_or_404(Recipe, id=recipe_id)
-            get_object_or_404(
-                ShoppingCart, user=current_user, recipe_in_cart=recipe
-            ).delete()
+        current_user = request.user
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        get_object_or_404(
+            ShoppingCart, user=current_user, recipe_in_cart=recipe
+        ).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
