@@ -43,9 +43,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         (ADMIN, "admin"),
     ]
 
-    first_name = models.CharField("first name", max_length=30, blank=True)
-    last_name = models.CharField("last name", max_length=150, blank=True)
-    username = models.CharField("username", max_length=30, unique=True)
+    first_name = models.CharField(
+        verbose_name="first name", max_length=30, blank=True
+    )
+    last_name = models.CharField(
+        verbose_name="last name", max_length=150, blank=True
+    )
+    username = models.CharField(
+        verbose_name="username", max_length=30, unique=True
+    )
     email = models.EmailField(
         verbose_name="email address", max_length=255, unique=True
     )
@@ -58,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(
         "staff status",
         default=False,
-        help_text="Designates whether the user can log into this admin site.",
+        help_text="Mожет ли пользователь войти на этот сайт в качестве администратора",
     )
 
     objects = UserManager()
@@ -68,6 +74,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
     class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
         ordering = ["-id"]
 
     @property

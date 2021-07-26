@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from users.serializers import UserSerializer
 
@@ -216,6 +217,16 @@ class FollowSerializer(UserSerializer):
         if len(subscribed) == 0:
             return False
         return True
+
+    def validate(self, data):
+        request = self.context["request"]
+        if request.method != "POST":
+            return data
+        current_user = str(request.user.id)
+        following = request.parser_context["kwargs"]["user_id"]
+        if current_user != following:
+            return data
+        raise ValidationError("Нельзя подписаться на самого себя")
 
 
 class ShoppingCartSerializer(serializers.ModelSerializer):

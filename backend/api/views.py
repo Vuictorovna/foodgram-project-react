@@ -82,10 +82,7 @@ class FollowViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         current_user = self.request.user
         following = get_object_or_404(User, id=self.kwargs["user_id"])
-
-        if current_user != following:
-            return serializer.save(user=current_user, following=following)
-        raise ValidationError("Нельзя подписаться на самого себя")
+        return serializer.save(user=current_user, following=following)
 
     @action(
         detail=False,
@@ -179,6 +176,8 @@ def get_list(request):
                 result[ingredient_in_cart_id] += amount_in_cart
             else:
                 result[ingredient_in_cart_id] = amount_in_cart
-    s = str(result)
-    b = io.BytesIO(s.encode("utf-8"))
-    return FileResponse(b, as_attachment=True, filename="list.txt")
+    ingredients_list = str(result)
+    ingredients_list_bytes = io.BytesIO(ingredients_list.encode("utf-8"))
+    return FileResponse(
+        ingredients_list_bytes, as_attachment=True, filename="list.txt"
+    )
