@@ -132,3 +132,7 @@ dmypy.json
 .idea
 
 .vscode
+
+image/
+
+static/
