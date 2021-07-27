@@ -47,8 +47,4 @@ class CurrentUserSerializer(UserSerializer):
         user = request.user
         if user.is_anonymous:
             return False
-        subscribed = user.follower.filter(following=obj)
-
-        if len(subscribed) == 0:
-            return False
-        return True
+        return user.follower.filter(following=obj).exists()

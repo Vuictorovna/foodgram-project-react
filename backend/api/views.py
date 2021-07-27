@@ -6,8 +6,9 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action, api_view
-from rest_framework.exceptions import ValidationError
+
 from rest_framework.response import Response
+from .filters import RecipeFilterBackend
 
 from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
 from .serializers import (
@@ -40,36 +41,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
     ]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, RecipeFilterBackend]
     filterset_fields = (
         "author",
         "tags__slug",
     )
-
-    def get_queryset(self):
-        user = self.request.user
-        is_favorited = self.request.query_params.get("is_favorited")
-        is_in_shopping_cart = self.request.query_params.get(
-            "is_in_shopping_cart"
-        )
-        if is_favorited is None and is_in_shopping_cart is None:
-            return Recipe.objects.all()
-
-        if is_favorited == "1":
-            favorites = []
-            recipes = user.favorite_recipes.all()
-            for recipe in recipes:
-                fav = recipe.favorite_recipe
-                favorites.append(fav)
-            return favorites
-
-        if is_in_shopping_cart == "1":
-            cart = []
-            recipes = user.in_cart.all()
-            for recipe in recipes:
-                rec = recipe.recipe_in_cart
-                cart.append(rec)
-            return cart
 
 
 class FollowViewSet(viewsets.ModelViewSet):

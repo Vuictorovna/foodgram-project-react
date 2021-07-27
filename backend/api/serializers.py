@@ -37,11 +37,7 @@ class AuthorSerializer(UserSerializer):
         user = request.user
         if user.is_anonymous:
             return False
-        subscribed = user.follower.filter(following=obj)
-
-        if len(subscribed) == 0:
-            return False
-        return True
+        return user.follower.filter(following=obj).exists()
 
 
 class FavoriteRecipeSerializer(serializers.ModelSerializer):
@@ -64,8 +60,10 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = "__all__"
 
-    def to_internal_value(self, data):
-        return Tag.objects.get(id=data)
+    # def to_internal_value(self, data):
+    #     return Tag.objects.get(id=data)
+    def create(self, validated_data):
+        print(validated_data)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -153,22 +151,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         user = request.user
         if user.is_anonymous:
             return False
-
-        favorited = user.favorite_recipes.filter(favorite_recipe=obj)
-        if len(favorited) == 0:
-            return False
-        return True
+        return user.favorite_recipes.filter(favorite_recipe=obj).exists()
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context["request"]
         user = request.user
         if user.is_anonymous:
             return False
-
-        is_in_shopping_cart = user.in_cart.filter(recipe_in_cart=obj)
-        if len(is_in_shopping_cart) == 0:
-            return False
-        return True
+        return user.in_cart.filter(recipe_in_cart=obj).exists()
 
 
 class RecipiesFromFollowingSerializer(RecipeSerializer):
@@ -213,10 +203,7 @@ class FollowSerializer(UserSerializer):
         ]
 
     def get_is_subscribed(self, obj):
-        subscribed = obj.user.follower.filter(following=obj.following)
-        if len(subscribed) == 0:
-            return False
-        return True
+        return obj.user.follower.filter(following=obj.following).exists()
 
     def validate(self, data):
         request = self.context["request"]
