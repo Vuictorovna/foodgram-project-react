@@ -6,19 +6,13 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action, api_view
-
 from rest_framework.response import Response
-from .filters import RecipeFilterBackend
 
+from .filters import RecipeFilterBackend
 from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
-from .serializers import (
-    FavoriteRecipeSerializer,
-    FollowSerializer,
-    IngredientSerializer,
-    RecipeSerializer,
-    ShoppingCartSerializer,
-    TagSerializer,
-)
+from .serializers import (FavoriteRecipeSerializer, FollowSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          ShoppingCartSerializer, TagSerializer)
 
 User = get_user_model()
 
