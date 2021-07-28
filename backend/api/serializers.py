@@ -60,10 +60,8 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = "__all__"
 
-    # def to_internal_value(self, data):
-    #     return Tag.objects.get(id=data)
-    def create(self, validated_data):
-        print(validated_data)
+    def to_internal_value(self, data):
+        return Tag.objects.get(id=data)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
