@@ -7,11 +7,14 @@ services:
       - ./data:/test_data
     env_file:
       - ../.env
+
   backend:
     build:
       context: ../backend
       dockerfile: Dockerfile
     restart: always
+    ports:
+      - 8001:8000
     volumes:
       - static_value:/code/static/
       - media_value:/code/media/
@@ -28,6 +31,7 @@ services:
       - ../frontend/:/app/result_build/
     depends_on:
       - backend
+
   nginx:
     image: nginx:1.19.3
     ports:

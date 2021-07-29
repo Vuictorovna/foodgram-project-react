@@ -6,7 +6,7 @@ import {
   Button,
   CheckboxGroup,
   Container,
-  Main 
+  Main
 } from '../../components'
 import cn from 'classnames'
 import styles from './styles.module.css'
@@ -32,19 +32,19 @@ const UserPage = ({ updateOrders }) => {
     handleAddToCart
   } = useRecipes()
   const { id } = useParams()
-  const [ user, setUser ] = useState(null)
-  const [ subscribed, setSubscribed ] = useState(false)
+  const [user, setUser] = useState(null)
+  const [subscribed, setSubscribed] = useState(false)
   const history = useHistory()
   const userContext = useContext(UserContext)
 
-  const getRecipes = ({ page = 1, tags }) => {
+  const getRecipes = ({ page = 0, tags }) => {
     api
       .getRecipes({ page, author: id, tags })
-        .then(res => {
-          const { results, count } = res
-          setRecipes(results)
-          setRecipesCount(count)
-        })
+      .then(res => {
+        const { results, count } = res
+        setRecipes(results)
+        setRecipesCount(count)
+      })
   }
 
   const getUser = () => {
@@ -61,7 +61,7 @@ const UserPage = ({ updateOrders }) => {
   useEffect(_ => {
     if (!user) { return }
     getRecipes({ page: recipesPage, tags: tagsValue, author: user.id })
-  }, [ recipesPage, tagsValue, user ])
+  }, [recipesPage, tagsValue, user])
 
   useEffect(_ => {
     getUser()
@@ -94,10 +94,10 @@ const UserPage = ({ updateOrders }) => {
       {(userContext || {}).id !== (user || {}).id && <Button
         className={styles.buttonSubscribe}
         clickHandler={_ => {
-          const method = subscribed ? api.deleteSubscriptions.bind(api) : api.subscribe.bind(api) 
-            method({
-              author_id: id
-            })
+          const method = subscribed ? api.deleteSubscriptions.bind(api) : api.subscribe.bind(api)
+          method({
+            author_id: id
+          })
             .then(_ => {
               setSubscribed(!subscribed)
             })

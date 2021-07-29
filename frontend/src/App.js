@@ -25,11 +25,11 @@ import {
 import { AuthContext, UserContext } from './contexts'
 
 function App() {
-  const [ loggedIn, setLoggedIn ] = useState(null)
-  const [ user, setUser ] = useState({})
-  const [ loading, setLoading ] = useState(false)
-  const [ orders, setOrders ] = useState(0)
-  const [ menuToggled, setMenuToggled ] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(null)
+  const [user, setUser] = useState({})
+  const [loading, setLoading] = useState(false)
+  const [orders, setOrders] = useState(0)
+  const [menuToggled, setMenuToggled] = useState(false)
   const location = useLocation()
 
   const registration = ({
@@ -90,13 +90,13 @@ function App() {
         setLoggedIn(false)
       }
     })
-    .catch(err => {
-      const errors = Object.values(err)
-      if (errors) {
-        alert(errors.join(', '))
-      }
-      setLoggedIn(false)
-    })
+      .catch(err => {
+        const errors = Object.values(err)
+        if (errors) {
+          alert(errors.join(', '))
+        }
+        setLoggedIn(false)
+      })
   }
 
   const loadSingleItem = ({ id, callback }) => {
@@ -130,7 +130,7 @@ function App() {
   const getOrders = () => {
     api
       .getRecipes({
-        page: 1,
+        page: 0,
         is_in_shopping_cart: true
       })
       .then(res => {
@@ -168,7 +168,7 @@ function App() {
   if (loggedIn === null) {
     return <div className={styles.loading}>Loading</div>
   }
-  
+
   return <AuthContext.Provider value={loggedIn}>
     <UserContext.Provider value={user}>
       <div className={cn("App", {
@@ -263,7 +263,7 @@ function App() {
             />
           </Route>
           <Route path='/'>
-            {loggedIn ? <Redirect to='/recipes' /> : <Redirect to='/signin'/>}
+            {loggedIn ? <Redirect to='/recipes' /> : <Redirect to='/signin' />}
           </Route>
         </Switch>
         <Footer />

@@ -1,4 +1,4 @@
-import { Card, Title, Pagination, CardList, Container, Main, CheckboxGroup  } from '../../components'
+import { Card, Title, Pagination, CardList, Container, Main, CheckboxGroup } from '../../components'
 import styles from './styles.module.css'
 import { useRecipes } from '../../utils/index.js'
 import { useEffect } from 'react'
@@ -19,8 +19,8 @@ const Favorites = ({ updateOrders }) => {
     handleLike,
     handleAddToCart
   } = useRecipes()
-  
-  const getRecipes = ({ page = 1, tags }) => {
+
+  const getRecipes = ({ page = 0, tags }) => {
     api
       .getRecipes({ page, is_favorited: true, tags })
       .then(res => {
