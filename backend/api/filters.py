@@ -1,4 +1,6 @@
 from rest_framework import filters
+from django_filters import FilterSet, CharFilter
+from .models import Ingredient
 
 
 def is_param_enabled(value):
@@ -22,3 +24,11 @@ class RecipeFilterBackend(filters.BaseFilterBackend):
             return cart
 
         return queryset
+
+
+class IngredientFilter(FilterSet):
+    name = CharFilter(field_name="name", lookup_expr="startswith")
+
+    class Meta:
+        model = Ingredient
+        fields = ("name",)

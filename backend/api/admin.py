@@ -1,7 +1,14 @@
 from django.contrib import admin
 
-from api.models import (Favorite, Follow, Ingredient, IngredientInRecipe,
-                        Recipe, ShoppingCart, Tag)
+from api.models import (
+    Favorite,
+    Follow,
+    Ingredient,
+    IngredientInRecipe,
+    Recipe,
+    ShoppingCart,
+    Tag,
+)
 
 
 @admin.register(Ingredient)
@@ -20,6 +27,9 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "author")
     list_filter = ("name", "author", "tags")
     empty_value_display = "-empty-"
+    # @admin.display(empty_value=None)
+    # def followers(self, obj):
+    #     return obj.favorite_recipe.all().count()
 
 
 @admin.register(Tag)

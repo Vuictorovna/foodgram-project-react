@@ -208,7 +208,7 @@ class Api {
     return fetch(
       `/api/recipes/${id}/favorite/`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           ...this._headers,
           'authorization': `Token ${token}`
@@ -305,7 +305,7 @@ class Api {
     return fetch(
       `/api/users/${author_id}/subscribe/`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           ...this._headers,
           'authorization': `Token ${token}`
@@ -350,7 +350,7 @@ class Api {
     return fetch(
       `/api/recipes/${id}/shopping_cart/`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           ...this._headers,
           'authorization': `Token ${token}`

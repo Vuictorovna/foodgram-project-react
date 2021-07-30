@@ -1,4 +1,5 @@
 import io
+import re
 
 from django.contrib.auth import get_user_model
 from django.http import FileResponse
@@ -8,7 +9,7 @@ from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action, api_view
 
 from rest_framework.response import Response
-from .filters import RecipeFilterBackend
+from .filters import RecipeFilterBackend, IngredientFilter
 
 from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
 from .serializers import (
@@ -26,8 +27,8 @@ User = get_user_model()
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    search_fields = ("name",)
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = IngredientFilter
     pagination_class = None
 
 
@@ -83,9 +84,14 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         user = self.request.user
         return user.favorite_recipes.all()
 
+    # @action(
+    #     detail=False,
+    #     methods=["GET"],
+    # )
     def perform_create(self, serializer):
         current_user = self.request.user
         recipe = get_object_or_404(Recipe, id=self.kwargs["recipe_id"])
+        print(recipe)
         return serializer.save(user=current_user, favorite_recipe=recipe)
 
     @action(

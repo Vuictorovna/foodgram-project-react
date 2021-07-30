@@ -2,8 +2,15 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .views import (FavoriteViewSet, FollowViewSet, IngredientViewSet,
-                    RecipeViewSet, ShoppingCartViewSet, TagViewSet, get_list)
+from .views import (
+    FavoriteViewSet,
+    FollowViewSet,
+    IngredientViewSet,
+    RecipeViewSet,
+    ShoppingCartViewSet,
+    TagViewSet,
+    get_list,
+)
 
 router = DefaultRouter()
 
@@ -25,7 +32,7 @@ router.register(
     basename="favorite",
 )
 router.register(
-    r"recipes/favorite",
+    r"favorites",
     FavoriteViewSet,
     basename="favorite_list",
 )
@@ -51,10 +58,10 @@ router.register(
 
 
 urlpatterns = [
-    path("", include(router.urls)),
     path(
-        r"recipes/download_shopping_cart",
+        r"recipes/download_shopping_cart/",
         get_list,
         name="download_shopping_cart",
     ),
+    path("", include(router.urls)),
 ]
