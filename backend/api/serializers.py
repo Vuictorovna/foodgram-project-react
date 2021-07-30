@@ -138,7 +138,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             "ingredients",
             "name",
             "image",
-            "text_description",
+            "text",
             "cooking_time",
             "is_favorited",
             "is_in_shopping_cart",

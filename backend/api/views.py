@@ -28,11 +28,13 @@ class IngredientViewSet(viewsets.ModelViewSet):
     serializer_class = IngredientSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ("name",)
+    pagination_class = None
 
 
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):

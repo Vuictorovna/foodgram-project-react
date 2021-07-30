@@ -5,7 +5,6 @@ class Api {
   }
 
   checkResponse(res) {
-    console.log(res)
     return new Promise((resolve, reject) => {
       if (res.status === 204) {
         return resolve(res)
@@ -318,7 +317,6 @@ class Api {
   // ingredients
   getIngredients({ name }) {
     const token = localStorage.getItem('token')
-    console.log("fetchin ingredients", token)
     return fetch(
       `/api/ingredients/?name=${name}`,
       {

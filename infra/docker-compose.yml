@@ -4,7 +4,7 @@ services:
     image: postgres:12.4
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      - ./data:/test_data
+      - ../data:/test_data
     env_file:
       - ../.env
 
