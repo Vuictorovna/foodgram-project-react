@@ -246,7 +246,7 @@ class Api {
   }
 
   getUsers({
-    page = 1,
+    page = 0,
     limit = 6
   }) {
     const token = localStorage.getItem('token')

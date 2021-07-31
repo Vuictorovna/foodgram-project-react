@@ -1,6 +1,6 @@
 from rest_framework import filters
-from django_filters import FilterSet, CharFilter
-from .models import Ingredient
+from django_filters import FilterSet, CharFilter, ModelMultipleChoiceFilter
+from .models import Ingredient, Tag, Recipe
 
 
 def is_param_enabled(value):
@@ -32,3 +32,15 @@ class IngredientFilter(FilterSet):
     class Meta:
         model = Ingredient
         fields = ("name",)
+
+
+class RecipeFilter(FilterSet):
+    tags = ModelMultipleChoiceFilter(
+        field_name="tags__slug",
+        to_field_name="slug",
+        queryset=Tag.objects.all(),
+    )
+
+    class Meta:
+        model = Recipe
+        fields = ("author",)

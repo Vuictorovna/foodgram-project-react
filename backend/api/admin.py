@@ -24,12 +24,13 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "author")
+    list_display = ("id", "name", "author", "followers")
     list_filter = ("name", "author", "tags")
     empty_value_display = "-empty-"
-    # @admin.display(empty_value=None)
-    # def followers(self, obj):
-    #     return obj.favorite_recipe.all().count()
+
+    @admin.display(empty_value=None)
+    def followers(self, obj):
+        return obj.favorited_by.all().count()
 
 
 @admin.register(Tag)

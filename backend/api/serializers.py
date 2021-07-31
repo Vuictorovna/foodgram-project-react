@@ -179,9 +179,7 @@ class FollowSerializer(UserSerializer):
     last_name = serializers.CharField(
         source="following.last_name", read_only=True
     )
-    recipes = RecipiesFromFollowingSerializer(
-        source="following.recipes", many=True, read_only=True
-    )
+    recipes = serializers.SerializerMethodField()
     recipes_count = serializers.IntegerField(
         source="following.recipes.count", read_only=True
     )
@@ -202,6 +200,16 @@ class FollowSerializer(UserSerializer):
 
     def get_is_subscribed(self, obj):
         return obj.user.follower.filter(following=obj.following).exists()
+
+    def get_recipes(self, obj):
+        request = self.context["request"]
+        recipes_limit = request.query_params.get("recipes_limit")
+        if recipes_limit is None:
+            result = obj.following.recipes.all()
+        else:
+            recipes_limit = int(request.query_params.get("recipes_limit"))
+            result = obj.following.recipes.all()[:recipes_limit]
+        return RecipiesFromFollowingSerializer(result, many=True).data
 
     def validate(self, data):
         request = self.context["request"]

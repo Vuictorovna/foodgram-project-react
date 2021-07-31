@@ -9,7 +9,7 @@ from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action, api_view
 
 from rest_framework.response import Response
-from .filters import RecipeFilterBackend, IngredientFilter
+from .filters import RecipeFilterBackend, IngredientFilter, RecipeFilter
 
 from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
 from .serializers import (
@@ -45,10 +45,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticatedOrReadOnly,
     ]
     filter_backends = [DjangoFilterBackend, RecipeFilterBackend]
-    filterset_fields = (
-        "author",
-        "tags__slug",
-    )
+    filter_class = RecipeFilter
+    # filterset_fields = ("author",)
 
 
 class FollowViewSet(viewsets.ModelViewSet):
