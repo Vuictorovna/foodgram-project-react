@@ -1,19 +1,46 @@
 version: '3.3'
 services:
+  db:
+    image: postgres:12.4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ../data:/test_data
+    env_file:
+      - .env
+
+  backend:
+    image: vuictorovna/foodgram:v.1
+    restart: always
+    volumes:
+      - static_value:/code/static/
+      - media_value:/code/media/
+    depends_on:
+      - db
+    env_file:
+      - .env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: vuictorovna/foodgram-frontend:v.1
     volumes:
-      - ../frontend/:/app/result_build/
+      - frontend_value:/app/result_build/build
+    depends_on:
+      - backend
+
   nginx:
     image: nginx:1.19.3
     ports:
       - 80:80
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ../frontend/build:/usr/share/nginx/html/
-      - ../docs:/usr/share/nginx/html/api/docs
-      # - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
-      # - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
+      - frontend_value:/usr/share/nginx/html/
+      - static_value:/var/html/static/
+      - media_value:/var/html/media/
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  postgres_data:
+  static_value:
+  media_value:
+  frontend_value:

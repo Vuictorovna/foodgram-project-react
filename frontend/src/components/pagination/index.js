@@ -6,7 +6,7 @@ import arrowRight from './arrow-right.png'
 import { useState } from 'react'
 
 const Pagination = ({ count = 0, limit = 6, initialActive = 1, onPageChange }) => {
-  const [ active, setActive ] = useState(initialActive)
+  const [active, setActive] = useState(initialActive)
   const onButtonClick = (active) => {
     setActive(active)
     onPageChange(active)
@@ -32,8 +32,8 @@ const Pagination = ({ count = 0, limit = 6, initialActive = 1, onPageChange }) =
       return <div
         className={cn(
           styles.paginationItem, {
-            [styles.paginationItemActive]: idx + 1 === active
-          }
+          [styles.paginationItemActive]: idx + 1 === active
+        }
         )}
         onClick={_ => onButtonClick(idx + 1)}
         key={idx}

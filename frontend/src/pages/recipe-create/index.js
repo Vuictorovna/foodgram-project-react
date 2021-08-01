@@ -8,21 +8,21 @@ import MetaTags from 'react-meta-tags'
 
 const RecipeCreate = ({ onEdit }) => {
   const { value, handleChange, setValue } = useTags()
-  const [ recipeName, setRecipeName ] = useState('')
+  const [recipeName, setRecipeName] = useState('')
   const history = useHistory()
-  const [ ingredientValue, setIngredientValue ] = useState({
+  const [ingredientValue, setIngredientValue] = useState({
     name: '',
     id: null,
     amount: '',
     measurement_unit: ''
   })
-  const [ recipeIngredients, setRecipeIngredients ] = useState([])
-  const [ recipeText, setRecipeText ] = useState('')
-  const [ recipeTime, setRecipeTime ] = useState('')
-  const [ recipeFile, setRecipeFile ] = useState(null)
+  const [recipeIngredients, setRecipeIngredients] = useState([])
+  const [recipeText, setRecipeText] = useState('')
+  const [recipeTime, setRecipeTime] = useState('')
+  const [recipeFile, setRecipeFile] = useState(null)
 
-  const [ ingredients, setIngredients ] = useState([])
-  const [ showIngredients, setShowIngredients ] = useState(false)
+  const [ingredients, setIngredients] = useState([])
+  const [showIngredients, setShowIngredients] = useState(false)
   useEffect(_ => {
     if (ingredientValue.name === '') {
       return setIngredients([])
@@ -52,12 +52,12 @@ const RecipeCreate = ({ onEdit }) => {
 
   const checkIfDisabled = () => {
     return recipeText === '' ||
-    recipeName === '' ||
-    recipeIngredients.length === 0 ||
-    value.filter(item => item.value).length === 0 ||
-    recipeTime === '' ||
-    recipeFile === '' ||
-    recipeFile === null
+      recipeName === '' ||
+      recipeIngredients.length === 0 ||
+      value.filter(item => item.value).length === 0 ||
+      recipeTime === '' ||
+      recipeFile === '' ||
+      recipeFile === null
   }
 
   return <Main>
@@ -84,20 +84,20 @@ const RecipeCreate = ({ onEdit }) => {
             image: recipeFile
           }
           api
-          .createRecipe(data)
-          .then(res => {
-            history.push(`/recipes/${res.id}`)
-          })
-          .catch(err => {
-            const { non_field_errors } = err
-            if (non_field_errors) {
-              alert(non_field_errors.join(', '))
-            }
-            const errors = Object.values(err)
-            if (errors) {
-              alert(errors.join(', '))
-            }
-          })
+            .createRecipe(data)
+            .then(res => {
+              history.push(`/recipes/${res.id}`)
+            })
+            .catch(err => {
+              const { non_field_errors } = err
+              if (non_field_errors) {
+                alert(non_field_errors.join(', '))
+              }
+              const errors = Object.values(err)
+              if (errors) {
+                alert(errors.join(', '))
+              }
+            })
         }}
       >
         <Input

@@ -11,11 +11,11 @@ const Cart = ({ updateOrders, orders }) => {
     setRecipes,
     handleAddToCart
   } = useRecipes()
-  
+
   const getRecipes = () => {
     api
       .getRecipes({
-        page: 1,
+        page: 0,
         limit: 999,
         is_in_shopping_cart: true
       })

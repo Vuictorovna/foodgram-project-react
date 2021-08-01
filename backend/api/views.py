@@ -4,15 +4,20 @@ from django.contrib.auth import get_user_model
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, permissions, status, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 
-from .filters import RecipeFilterBackend
+from .filters import IngredientFilter, RecipeFilter, RecipeFilterBackend
 from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
-from .serializers import (FavoriteRecipeSerializer, FollowSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          ShoppingCartSerializer, TagSerializer)
+from .serializers import (
+    FavoriteRecipeSerializer,
+    FollowSerializer,
+    IngredientSerializer,
+    RecipeSerializer,
+    ShoppingCartSerializer,
+    TagSerializer,
+)
 
 User = get_user_model()
 
@@ -20,13 +25,15 @@ User = get_user_model()
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    search_fields = ("name",)
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = IngredientFilter
+    pagination_class = None
 
 
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -36,10 +43,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permissions.IsAuthenticatedOrReadOnly,
     ]
     filter_backends = [DjangoFilterBackend, RecipeFilterBackend]
-    filterset_fields = (
-        "author",
-        "tags__slug",
-    )
+    filter_class = RecipeFilter
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -141,11 +145,11 @@ def get_list(request):
         ingredients = recipe.recipe_in_cart.ingredientinrecipe_set.all()
         for ingredient in ingredients:
             amount_in_cart = ingredient.amount
-            ingredient_in_cart_id = ingredient.ingredient.id
-            if ingredient_in_cart_id in result:
-                result[ingredient_in_cart_id] += amount_in_cart
+            ingredient_in_cart_name = ingredient.ingredient.name
+            if ingredient_in_cart_name in result:
+                result[ingredient_in_cart_name] += amount_in_cart
             else:
-                result[ingredient_in_cart_id] = amount_in_cart
+                result[ingredient_in_cart_name] = amount_in_cart
     ingredients_list = str(result)
     ingredients_list_bytes = io.BytesIO(ingredients_list.encode("utf-8"))
     return FileResponse(

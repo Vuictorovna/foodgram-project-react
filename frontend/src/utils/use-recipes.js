@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useTags } from './index.js'
 import api from '../api'
 
-export default function useRecipes () {
-  const [ recipes, setRecipes ] = useState([])
-  const [ recipesCount, setRecipesCount ] = useState(0)
-  const [ recipesPage, setRecipesPage ] = useState(1)
+export default function useRecipes() {
+  const [recipes, setRecipes] = useState([])
+  const [recipesCount, setRecipesCount] = useState(0)
+  const [recipesPage, setRecipesPage] = useState(0)
   const { value: tagsValue, handleChange: handleTagsChange, setValue: setTagsValue } = useTags()
 
   const handleLike = ({ id, toLike = true }) => {
@@ -19,12 +19,12 @@ export default function useRecipes () {
       })
       setRecipes(recipesUpdated)
     })
-    .catch(err => {
-      const { errors } = err
-      if (errors) {
-        alert(errors)
-      }
-    })
+      .catch(err => {
+        const { errors } = err
+        if (errors) {
+          alert(errors)
+        }
+      })
   }
 
   const handleAddToCart = ({ id, toAdd = true, callback }) => {
@@ -39,12 +39,12 @@ export default function useRecipes () {
       setRecipes(recipesUpdated)
       callback && callback(toAdd)
     })
-    .catch(err => {
-      const { errors } = err
-      if (errors) {
-        alert(errors)
-      }
-    })
+      .catch(err => {
+        const { errors } = err
+        if (errors) {
+          alert(errors)
+        }
+      })
   }
 
   return {

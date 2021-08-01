@@ -134,5 +134,7 @@ dmypy.json
 .vscode
 
 image/
-
 static/
+media/
+
+.DS_Store
