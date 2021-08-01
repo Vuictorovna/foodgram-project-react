@@ -7,7 +7,7 @@
 ***
 Django administration:
 * user: admin
-* password: admin
+* password: YandexPrakticum
 
 ### Технологии
 * Python 3.8.5
