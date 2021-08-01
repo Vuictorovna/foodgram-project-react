@@ -1,6 +1,7 @@
+from django_filters import CharFilter, FilterSet, ModelMultipleChoiceFilter
 from rest_framework import filters
-from django_filters import FilterSet, CharFilter, ModelMultipleChoiceFilter
-from .models import Ingredient, Tag, Recipe
+
+from .models import Ingredient, Recipe, Tag
 
 
 def is_param_enabled(value):

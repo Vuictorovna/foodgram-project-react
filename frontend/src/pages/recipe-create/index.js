@@ -37,7 +37,6 @@ const RecipeCreate = ({ onEdit }) => {
   useEffect(_ => {
     api.getTags()
       .then(tags => {
-        console.log(tags)
         setValue(tags.map(tag => ({ ...tag, value: true })))
       })
   }, [])

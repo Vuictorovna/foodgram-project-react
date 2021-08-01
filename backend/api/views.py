@@ -1,16 +1,14 @@
 import io
-import re
 
 from django.contrib.auth import get_user_model
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, permissions, status, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action, api_view
-
 from rest_framework.response import Response
-from .filters import RecipeFilterBackend, IngredientFilter, RecipeFilter
 
+from .filters import IngredientFilter, RecipeFilter, RecipeFilterBackend
 from .models import Favorite, Follow, Ingredient, Recipe, ShoppingCart, Tag
 from .serializers import (
     FavoriteRecipeSerializer,
@@ -46,7 +44,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     ]
     filter_backends = [DjangoFilterBackend, RecipeFilterBackend]
     filter_class = RecipeFilter
-    # filterset_fields = ("author",)
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -82,14 +79,9 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         user = self.request.user
         return user.favorite_recipes.all()
 
-    # @action(
-    #     detail=False,
-    #     methods=["GET"],
-    # )
     def perform_create(self, serializer):
         current_user = self.request.user
         recipe = get_object_or_404(Recipe, id=self.kwargs["recipe_id"])
-        print(recipe)
         return serializer.save(user=current_user, favorite_recipe=recipe)
 
     @action(
@@ -153,11 +145,11 @@ def get_list(request):
         ingredients = recipe.recipe_in_cart.ingredientinrecipe_set.all()
         for ingredient in ingredients:
             amount_in_cart = ingredient.amount
-            ingredient_in_cart_id = ingredient.ingredient.id
-            if ingredient_in_cart_id in result:
-                result[ingredient_in_cart_id] += amount_in_cart
+            ingredient_in_cart_name = ingredient.ingredient.name
+            if ingredient_in_cart_name in result:
+                result[ingredient_in_cart_name] += amount_in_cart
             else:
-                result[ingredient_in_cart_id] = amount_in_cart
+                result[ingredient_in_cart_name] = amount_in_cart
     ingredients_list = str(result)
     ingredients_list_bytes = io.BytesIO(ingredients_list.encode("utf-8"))
     return FileResponse(
