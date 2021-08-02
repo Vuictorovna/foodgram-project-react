@@ -104,7 +104,7 @@ class Api {
   // recipes
 
   getRecipes({
-    page = 0,
+    page = 1,
     limit = 6,
     is_favorited = false,
     is_in_shopping_cart = false,
@@ -246,7 +246,7 @@ class Api {
   }
 
   getUsers({
-    page = 0,
+    page = 1,
     limit = 6
   }) {
     const token = localStorage.getItem('token')
@@ -331,14 +331,12 @@ class Api {
 
   // tags
   getTags() {
-    const token = localStorage.getItem('token')
     return fetch(
       `/api/tags/`,
       {
         method: 'GET',
         headers: {
           ...this._headers,
-          'authorization': `Token ${token}`
         }
       }
     ).then(this.checkResponse)

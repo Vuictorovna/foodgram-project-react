@@ -2,11 +2,19 @@ from django.contrib.auth import get_user_model
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from django.db import transaction
 
 from users.serializers import UserSerializer
 
-from .models import (Favorite, Follow, Ingredient, IngredientInRecipe, Recipe,
-                     ShoppingCart, Tag)
+from .models import (
+    Favorite,
+    Follow,
+    Ingredient,
+    IngredientInRecipe,
+    Recipe,
+    ShoppingCart,
+    Tag,
+)
 
 User = get_user_model()
 
@@ -70,7 +78,6 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
     id = IngredientSerializer()
     name = serializers.CharField(required=False)
     measurement_unit = serializers.IntegerField(required=False)
-    amount = serializers.IntegerField()
 
     class Meta:
         model = IngredientInRecipe
@@ -93,6 +100,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
+    @transaction.atomic
     def create(self, validated_data):
         tags = validated_data.pop("tags")
         ingredients = validated_data.pop("ingredientinrecipe_set")
@@ -107,6 +115,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             )
         return recipe
 
+    @transaction.atomic
     def update(self, instance, validated_data):
         IngredientInRecipe.objects.filter(recipe=instance).delete()
         tags = validated_data.pop("tags")

@@ -20,7 +20,7 @@ const Favorites = ({ updateOrders }) => {
     handleAddToCart
   } = useRecipes()
 
-  const getRecipes = ({ page = 0, tags }) => {
+  const getRecipes = ({ page = 1, tags }) => {
     api
       .getRecipes({ page, is_favorited: true, tags })
       .then(res => {

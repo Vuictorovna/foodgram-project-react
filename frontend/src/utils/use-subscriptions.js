@@ -4,7 +4,7 @@ import api from '../api'
 
 export default function useRecipes() {
   const [subscriptions, setSubscriptions] = useState([])
-  const [subscriptionsPage, setSubscriptionsPage] = useState(0)
+  const [subscriptionsPage, setSubscriptionsPage] = useState(1)
   const [subscriptionsCount, setSubscriptionsCount] = useState(0)
 
   const removeSubscription = ({ id }) => {

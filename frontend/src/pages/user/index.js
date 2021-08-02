@@ -37,7 +37,7 @@ const UserPage = ({ updateOrders }) => {
   const history = useHistory()
   const userContext = useContext(UserContext)
 
-  const getRecipes = ({ page = 0, tags }) => {
+  const getRecipes = ({ page = 1, tags }) => {
     api
       .getRecipes({ page, author: id, tags })
       .then(res => {

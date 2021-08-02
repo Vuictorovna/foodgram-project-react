@@ -21,7 +21,7 @@ const HomePage = ({ updateOrders }) => {
   } = useRecipes()
 
 
-  const getRecipes = ({ page = 0, tags }) => {
+  const getRecipes = ({ page = 1, tags }) => {
     api
       .getRecipes({ page, tags })
       .then(res => {

@@ -130,7 +130,7 @@ function App() {
   const getOrders = () => {
     api
       .getRecipes({
-        page: 0,
+        page: 1,
         is_in_shopping_cart: true
       })
       .then(res => {

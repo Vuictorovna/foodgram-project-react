@@ -15,7 +15,7 @@ const Cart = ({ updateOrders, orders }) => {
   const getRecipes = () => {
     api
       .getRecipes({
-        page: 0,
+        page: 1,
         limit: 999,
         is_in_shopping_cart: true
       })
