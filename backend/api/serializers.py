@@ -78,6 +78,7 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
     id = IngredientSerializer()
     name = serializers.CharField(required=False)
     measurement_unit = serializers.IntegerField(required=False)
+    amount = serializers.IntegerField()
 
     class Meta:
         model = IngredientInRecipe
@@ -108,6 +109,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         recipe = Recipe.objects.create(author=user, **validated_data)
         recipe.tags.set(tags)
         for ingredient in ingredients:
+            if ingredient["amount"] <= 0:
+                raise serializers.ValidationError(
+                    "Количество ингредиентов должно быть больше 0"
+                )
             IngredientInRecipe.objects.create(
                 ingredient=ingredient["id"],
                 recipe=recipe,
@@ -123,6 +128,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.set(tags)
         Recipe.objects.filter(pk=instance.pk).update(**validated_data)
         for ingredient in ingredients:
+            if ingredient["amount"] <= 0:
+                raise serializers.ValidationError(
+                    "Количество ингредиентов должно быть больше 0"
+                )
             IngredientInRecipe.objects.create(
                 ingredient=ingredient["id"],
                 recipe=instance,
