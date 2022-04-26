@@ -5,8 +5,6 @@
 Let me introduce you the "Product Assistant: Foodgram" application. This is a web-site where users can create and manage their cooking recipes collections. For instance, you can publish your own recipes attaching yummy photos of ready meals or browse other users recipes. What is more, recipes can be added to favorites and you can subscribe to publications of other authors.
 Also there you might find extremely useful service - “Shopping List”,  which allow you to download a whole list of products required to prepare one or several selected dishes before going shoppping.
 
-#### Найти проект можно по этому адресу/ Web address: http://51.250.18.125/recipes
-
 
 ### Технологии/ Technologies:
 * Python 3.8.5
