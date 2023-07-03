@@ -1,12 +1,18 @@
-import styles from './style.module.css'
-import { Container, LinkComponent } from '../index'
+import styles from "./style.module.css";
+import { Container, LinkComponent } from "../index";
 
 const Footer = () => {
-  return <footer className={styles.footer}>
+  return (
+    <footer className={styles.footer}>
       <Container className={styles.footer__container}>
-        <LinkComponent href='#' title='Продуктовый помощник' className={styles.footer__brand} />
+        <LinkComponent
+          href="#"
+          title="Food Companion"
+          className={styles.footer__brand}
+        />
       </Container>
-  </footer>
-}
+    </footer>
+  );
+};
 
-export default Footer
+export default Footer;

@@ -111,7 +111,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             if ingredient["amount"] <= 0:
                 raise serializers.ValidationError(
-                    "Количество ингредиентов должно быть больше 0"
+                    "The amount of ingredients must be greater than 0."
                 )
             IngredientInRecipe.objects.create(
                 ingredient=ingredient["id"],
@@ -130,7 +130,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             if ingredient["amount"] <= 0:
                 raise serializers.ValidationError(
-                    "Количество ингредиентов должно быть больше 0"
+                    "The amount of ingredients must be greater than 0."
                 )
             IngredientInRecipe.objects.create(
                 ingredient=ingredient["id"],
@@ -230,7 +230,7 @@ class FollowSerializer(UserSerializer):
         following = request.parser_context["kwargs"]["user_id"]
         if current_user != following:
             return data
-        raise ValidationError("Нельзя подписаться на самого себя")
+        raise ValidationError("You cannot follow yourself")
 
 
 class ShoppingCartSerializer(serializers.ModelSerializer):

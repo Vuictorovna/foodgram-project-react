@@ -51,7 +51,7 @@ class FollowViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return user.follower.all()
+        return user.follower.all()  # type: ignore
 
     def perform_create(self, serializer):
         current_user = self.request.user
@@ -77,7 +77,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return user.favorite_recipes.all()
+        return user.favorite_recipes.all()  # type: ignore
 
     def perform_create(self, serializer):
         current_user = self.request.user
@@ -103,7 +103,7 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        cart = user.in_cart.all()
+        cart = user.in_cart.all()  # type: ignore
         result = {}
         for recipe in cart:
             ingredients = recipe.recipe_in_cart.ingredientinrecipe_set.all()

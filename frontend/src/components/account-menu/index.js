@@ -1,39 +1,39 @@
-import cn from 'classnames'
-import styles from './styles.module.css'
-import { useContext } from 'react'
-import { Button, LinkComponent } from '../index.js'
-import { AuthContext } from '../../contexts'
+import cn from "classnames";
+import styles from "./styles.module.css";
+import { useContext } from "react";
+import { Button, LinkComponent } from "../index.js";
+import { AuthContext } from "../../contexts";
 
 const AccountMenu = ({ onSignOut }) => {
-  const authContext = useContext(AuthContext)
+  const authContext = useContext(AuthContext);
   if (!authContext) {
-    return <div className={styles.menu}>
+    return (
+      <div className={styles.menu}>
+        <LinkComponent
+          className={styles.menuLink}
+          href="/signin"
+          title="Sign in"
+        />
+        <LinkComponent
+          href="/signup"
+          title="Sign up"
+          className={styles.menuButton}
+        />
+      </div>
+    );
+  }
+  return (
+    <div className={styles.menu}>
       <LinkComponent
         className={styles.menuLink}
-        href='/signin'
-        title='Войти'
+        href="/change-password"
+        title="Change password"
       />
-      <LinkComponent
-        href='/signup'
-        title='Создать аккаунт'
-        className={styles.menuButton}
-      />
+      <a className={styles.menuLink} onClick={onSignOut}>
+        Sign out
+      </a>
     </div>
-  }
-  return <div className={styles.menu}>
-    <LinkComponent
-      className={styles.menuLink}
-      href='/change-password'
-      title='Изменить пароль'
-    />
-    <a
-      className={styles.menuLink}
-      onClick={onSignOut}
-    >
-      Выход
-    </a>
-  </div>
-}
+  );
+};
 
-
-export default AccountMenu
+export default AccountMenu;
