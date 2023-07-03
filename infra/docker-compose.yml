@@ -9,7 +9,8 @@ services:
       - .env
 
   backend:
-    image: vuictorovna/foodgram:v.1
+    # image: vuictorovna/foodgram:v.1
+    image: vuictorovna/en_foodgram_backend:v.2
     restart: always
     volumes:
       - static_value:/code/static/
@@ -20,7 +21,8 @@ services:
       - .env
 
   frontend:
-    image: vuictorovna/foodgram-frontend:v.1
+    # image: vuictorovna/foodgram-frontend:v.1
+    image: vuictorovna/en_foodgram_frontend:v.2
     volumes:
       - frontend_value:/app/result_build/build
     depends_on:
