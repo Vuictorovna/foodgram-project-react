@@ -1,14 +1,59 @@
-### Описание/ Description
+### Description
 
-Перед вами приложение «Продуктовый помощник»: сайт, на котором пользователи могут публиковать рецепты, добавлять чужие рецепты в избранное и подписываться на публикации других авторов.
-Сервис «Список покупок» позволит перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
+**Introducing "Food companion: Foodgram" - Your Personal Culinary Companion**
+
+Foodgram is a dynamic, user-friendly web application where food lovers and culinary enthusiasts come together to create, share, and explore diverse cooking recipes.
+
+Our platform allows users to publish their own recipes, complete with tantalizing photos of the finished meals. You can also explore the recipe collections of other users, expanding your culinary horizon with a diverse array of dishes from around the world.
+
+Foodgram also serves as a platform for culinary interaction. Find recipes you love? You can add them to your favorites for easy access later. Impressed by a fellow user's culinary creations? You can subscribe to their publications, ensuring you never miss a new recipe from your favorite home chefs.
+
+One of Foodgram's most helpful features is our "Shopping List" service. This tool allows users to generate comprehensive shopping lists for one or multiple selected recipes, ensuring you have all the necessary ingredients before starting your culinary adventure. This feature not only simplifies your shopping experience but also reduces waste by ensuring you only buy what you need.
+
+So, whether you're a seasoned chef or a budding home cook, Foodgram offers the tools to enhance your cooking journey, explore new dishes, and connect with fellow food enthusiasts. Join us at Foodgram - where cooking meets community.
 
 ---
 
-Let me introduce you the "Product Assistant: Foodgram" application. This is a web-site where users can create and manage their cooking recipes collections. For instance, you can publish your own recipes attaching yummy photos of ready meals or browse other users recipes. What is more, recipes can be added to favorites and you can subscribe to publications of other authors.
-Also there you might find extremely useful service - “Shopping List”, which allow you to download a whole list of products required to prepare one or several selected dishes before going shoppping.
+## Screenshots
 
-#### Найти проект можно по этому адресу/ Web address: http://84.252.143.117/recipes
+**Recipe Page:**
+![Recipe Page](foodgram_screenshots/recipe.png)
+
+**Main Page:**
+![Main Page](foodgram_screenshots/main.png)
+
+**Favorites Page:**
+![Favorites](foodgram_screenshots/favorites.png)
+
+**Cart:**
+![Cart](foodgram_screenshots/cart.png)
+
+**Subscription Page:**
+![Subscription](foodgram_screenshots/subscriptions.png)
+
+---
+
+### Features
+
+**Foodgram offers an array of features designed to enhance your culinary journey:**
+
+- **Recipe Creation:** Users can publish their own recipes with detailed instructions and attach enticing images of the finished meals.
+
+- **Recipe Exploration:** Browse a diverse array of dishes shared by users around the world. Expand your culinary horizons and discover new favorite meals.
+
+- **Favorites:** Find a recipe you love? Add it to your favorites for easy future access. Organize and manage your favorite dishes efficiently.
+
+- **Subscriptions:** Follow other users to never miss their recipe publications. Keep up with the culinary creations of your favorite home chefs.
+
+- **Shopping List Service:** Generate comprehensive shopping lists for one or multiple selected recipes. This tool ensures you have all the necessary ingredients before you begin cooking.
+
+- **Interactivity:** Engage with other users by liking and commenting on their recipes. Foodgram is not just a cooking app - it's a community.
+
+- **Personalized User Experience:** Manage your own profile and recipe collection. Customize your Foodgram experience to fit your unique culinary journey.
+
+---
+
+#### Web address: http://34.147.153.183/recipes
 
 ### Технологии/ Technology:
 
@@ -19,15 +64,15 @@ Also there you might find extremely useful service - “Shopping List”, which 
 - Nginx 1.19.3
 - Postgres 12.4
 
-### Команды для работы с приложением/ How to start:
+### How to start:
 
-- Клонировать приложение к себе в репозиторий/ Clone the app to your repository
+- Clone the app to your repository
 
 ```bash
 git clone https://github.com/Vuictorovna/foodgram-project-react.git
 ```
 
-- Необходимые переменные окружения, сохраненные в .env/ Required environment variables saved in .env
+- Required environment variables saved in .env
 
   - DB_ENGINE
   - DB_NAME
@@ -36,13 +81,13 @@ git clone https://github.com/Vuictorovna/foodgram-project-react.git
   - DB_HOST
   - DB_PORT
 
-- Запуск приложения/ App launch
+- App launch
 
 ```bash
 docker-compose up
 ```
 
-- Сделать миграции/ Make migrations
+- Make migrations
 
 ```bash
 docker-compose exec backend python manage.py makemigrations
@@ -50,25 +95,25 @@ docker-compose exec backend python manage.py makemigrations
 docker-compose exec backend python manage.py migrate --noinput
 ```
 
-- Создание суперпользователя/ Create superuser
+- Create superuser
 
 ```bash
 docker-compose exec backend python manage.py createsuperuser
 ```
 
-- Подготовка статики проекта/ Preparing project statics
+- Preparing project statics
 
 ```bash
 docker-compose exec backend python manage.py collectstatic --no-input
 ```
 
-- Загрузка подготовленненных данных (ингредиенты)/ Loading prepared data (ingredients), run following command inside Postgres container
+- Loading prepared data (ingredients), run following command inside Postgres container
 
 ```bash
 
 cat /test_data/ingredients.csv | psql -U postgres -c "COPY api_ingredient (name, measurement_unit) FROM STDIN WITH (FORMAT CSV, HEADER TRUE);"
 ```
 
-### Авторы/ Author
+### Author
 
-Оля Сахаревич, студентка факультета Бэкэнд Яндекс.Практикум/ Volha Sakharevich, Yandex.Practicum student
+Volha Sakharevich
