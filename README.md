@@ -53,9 +53,9 @@ So, whether you're a seasoned chef or a budding home cook, Foodgram offers the t
 
 ---
 
-#### Web address: http://34.147.153.183/recipes
+#### Web address: http://34.147.153.183/
 
-### Технологии/ Technology:
+### Technology:
 
 - Python 3.8.5
 - Django 3.2.5
