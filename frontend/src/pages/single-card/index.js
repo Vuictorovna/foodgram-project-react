@@ -103,7 +103,7 @@ const SingleCard = ({ loadItem, updateOrders }) => {
                 {(userContext || {}).id === author.id && (
                   <LinkComponent
                     href={`${url}/edit`}
-                    title="Редактировать рецепт"
+                    title="Edit recipe"
                     className={styles["single-card__edit"]}
                   />
                 )}

@@ -66,7 +66,7 @@ const Card = ({
             {is_in_shopping_cart ? (
               <>
                 <Icons.DoneIcon />
-                Рецепт добавлен
+                Recipe added
               </>
             ) : (
               <>

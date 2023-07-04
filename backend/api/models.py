@@ -27,17 +27,17 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
-    JASPER = "#C84630"
-    ROSY = "#D4A0A7"
-    PLATINUM = "#E3E3E3"
-    GRAY = "#898989"
-    JADE = "#5DA271"
+    YELLOW = "#fffc31"
+    VIOLET = "#775478"
+    GREEN = "#616629"
+    CORAL = "#e94f37"
+    ONYX = "#393e41"
     COLOR_CHOICES = [
-        (JASPER, "#C84630"),
-        (ROSY, "#D4A0A7"),
-        (PLATINUM, "#E3E3E3"),
-        (GRAY, "#898989"),
-        (JADE, "#5DA271"),
+        (YELLOW, "#fffc31"),
+        (VIOLET, "#775478"),
+        (GREEN, "#616629"),
+        (CORAL, "#e94f37"),
+        (ONYX, "#393e41"),
     ]
     name = models.CharField(
         max_length=200,
